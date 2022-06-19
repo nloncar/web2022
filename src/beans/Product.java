@@ -5,7 +5,6 @@ public class Product {
 	private String id;
 	private String name;
 	private double price;
-	private double cena;
 	private String tip_objekta;
 	private String sadrzaj;
 	private boolean status;
