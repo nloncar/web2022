@@ -3,10 +3,10 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	<script src="jquery-3.3.1.min.js"></script>
-	<script src="login.js"></script>
+	<script src="register.js"></script>
 </head>
 <body>
-	<form id="registerForm">
+	<form id="forma">
 		<table>
 			<tr><td>Korisnicko ime:</td><td><input required type="text" name="username"></td></tr>
 			<tr id="errorNameTaken" hidden="true" style="color:red"><td>Ime je vec zauzeto</td></tr>
@@ -18,8 +18,8 @@
 			<tr id="errorEmptyField" hidden="true" style="color:red"><td>Popunite sva polja</td></tr>
 			<tr id="success" hidden="true" style="color:green"><td>Registracija uspesna</td></tr>
 			<tr><td><input  type="submit" value="Registracija"></td></tr>
-			<tr><td><input type="button" onclick="location.href='index.html';" value="Nazad" /></a></td></tr>
 		</table>
+		<input type="button" onclick="location.href='index.html';" value="Nazad" /></a>
 	</form>
 </body>
 </html>

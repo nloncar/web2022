@@ -1,0 +1,4 @@
+1;Teretana NS;22000;teretana
+2;Bazen SPENS;32000;bazen
+3;Ples fkgjdk;35000;plesni studio
+4;sdfdsfsdf;7100;teretana

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-		$('#registerForm').submit(function(event) {
+		$('#forma').submit(function(event) {
 			event.preventDefault();
 			let username = $('input[name="username"]').val();
 		    let password = $('input[name="password"]').val();
@@ -16,6 +16,7 @@ $(document).ready(function() {
 		    	url: 'rest/register/newUser',
 		    	data: JSON.stringify({username: username, password: password, name: name, surname: surname, birthday: birthday, gender: gender}),
 		    	contentType: 'application/json',
+		    	
 		    	success: function(data) {
 					if(data == null){
 					    $('#errorNameTaken').hide().delay(3000).fadeOut();

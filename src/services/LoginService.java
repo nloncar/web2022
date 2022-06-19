@@ -35,7 +35,6 @@ public class LoginService {
 	
 	@POST
 	@Path("/user")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User login(User user, @Context HttpServletRequest request) {
 		System.out.print("login");

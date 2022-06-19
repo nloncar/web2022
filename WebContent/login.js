@@ -8,14 +8,15 @@ $(document).ready(function() {
 		$('#error').hide();
 		
 		$.post({
-			url: 'rest/login/user',
-			
+			url: 'rest/login/user',			
 			data: JSON.stringify({username: username, password: password}),
 			contentType: 'application/json',
 			
 			success: function(data) {
 				if(data != null){
-				
+					$("#success").show().delay(3000).fadeOut(function(){
+						window.location.href="/objekti.html";
+					})
 				}
 				else
 				{

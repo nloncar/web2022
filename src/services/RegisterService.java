@@ -35,7 +35,6 @@ public class RegisterService {
 	
 	@POST
 	@Path("/newUser")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User register(User user, @Context HttpServletRequest request) {
 		System.out.print("registered");
