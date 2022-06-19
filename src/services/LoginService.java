@@ -13,15 +13,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import dao.UserDAO;
-import model.User;
+import beans.User;
 
 @Path("/login")
 public class LoginService {
 	
 	@Context
 	ServletContext ctx;
-
 	
+	public LoginService() {
+		
+	}
+
+	@PostConstruct
 	public void init() {
 		if (ctx.getAttribute("userDAO") == null) {
 	    	String contextPath = ctx.getRealPath("");
@@ -30,16 +34,17 @@ public class LoginService {
 	}
 	
 	@POST
-	@Path("/login")
+	@Path("/user")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response login(User user, @Context HttpServletRequest request) {
+	public User login(User user, @Context HttpServletRequest request) {
+		System.out.print("login");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
 		User loggedInUser = userDao.loggedInUser(user.getUsername(), user.getPassword());
 		if (loggedInUser == null) {
-			return Response.status(400).entity("Invalid username and/or password").build();
+			return null;
 		}
 		request.getSession().setAttribute("user", loggedInUser);
-		return Response.status(200).build();
+		return loggedInUser;
 	}
 }

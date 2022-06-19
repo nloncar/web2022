@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import dao.UserDAO;
-import model.User;
+import beans.User;
 
 @Path("/register")
 public class RegisterService {
@@ -21,7 +21,11 @@ public class RegisterService {
 	@Context
 	ServletContext ctx;
 
-	
+	public RegisterService() {
+		
+	}
+
+	@PostConstruct	
 	public void init() {
 		if (ctx.getAttribute("userDAO") == null) {
 	    	String contextPath = ctx.getRealPath("");
@@ -30,17 +34,14 @@ public class RegisterService {
 	}	
 	
 	@POST
-	@Path("/register")
+	@Path("/newUser")
 	@Consumes(MediaType.APPLICATION_JSON)
-	//@Produces(MediaType.APPLICATION_JSON)
-	public Response register(User user, @Context HttpServletRequest request) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public User register(User user, @Context HttpServletRequest request) {
 		System.out.print("registered");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		boolean reg = userDao.registerUser(user);
-		if (!reg) {
-			return Response.status(400).entity("Korisnicko ime je zauzeto").build();
-		}
-		return Response.status(200).build();
+		User regUser = userDao.registerUser(user);
+		return regUser;
 	}
 	
 }

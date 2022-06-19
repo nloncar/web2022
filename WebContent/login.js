@@ -8,16 +8,19 @@ $(document).ready(function() {
 		$('#error').hide();
 		
 		$.post({
-			url: 'rest/login',
+			url: 'rest/login/user',
 			
 			data: JSON.stringify({username: username, password: password}),
 			contentType: 'application/json',
 			
-			success: function() {
-
-			},
-			error: function() {
-
+			success: function(data) {
+				if(data != null){
+				
+				}
+				else
+				{
+					$('#error').show().delay(3000).fadeOut();
+				}
 			}
 		});
 	});

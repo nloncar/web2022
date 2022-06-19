@@ -14,14 +14,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import model.User;
+import beans.User;
 
 public class UserDAO {
 	//private Map<String, User> users = new HashMap<>();
 	private ArrayList<User> users = new ArrayList<User>();
+	private String contextPath;
 
 	public UserDAO(String contextPath) {
-		//loadUsers(contextPath);
+		this.contextPath = contextPath;
+		loadUsers();
 	}
 	
 	public boolean nameExists(String username) {
@@ -44,21 +46,21 @@ public class UserDAO {
 		return null;
 	}
 	
-	public boolean registerUser(User user) 
+	public User registerUser(User user) 
 	{
 		if(nameExists(user.getUsername()))
 		{
-			return false;
+			return null;
 		}
 		loadUsers();
 		users.add(user);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			mapper.writeValue(new File("users.json"), users);
-			return true;
+			mapper.writeValue(new File(this.contextPath + "/users.json"), users);
+			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 	
@@ -66,7 +68,7 @@ public class UserDAO {
 	{
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			users = mapper.readValue(new File("users.json"), new TypeReference<ArrayList<User>>(){});
+			users = mapper.readValue(new File(this.contextPath + "/users.json"), new TypeReference<ArrayList<User>>(){});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

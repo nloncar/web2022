@@ -10,16 +10,20 @@ $(document).ready(function() {
 		    
 		    $('#errorNameTaken').hide();
 		    $('#errorEmptyField').hide();
+		    $('#success').hide();
 		    
 		    $.post({
-		    	url: 'rest/register',
+		    	url: 'rest/register/newUser',
 		    	data: JSON.stringify({username: username, password: password, name: name, surname: surname, birthday: birthday, gender: gender}),
 		    	contentType: 'application/json',
-		    	success: function() {
-					
-				},
-				error: function(){
-					
+		    	success: function(data) {
+					if(data == null){
+					    $('#errorNameTaken').hide().delay(3000).fadeOut();
+						$('#success').show().delay(3000).fadeOut();
+					}else{
+						$('#errorNameTaken').show().delay(3000).fadeOut();
+						$('#success').hide().delay(3000).fadeOut();
+					}
 				}
 		    });
 		});
