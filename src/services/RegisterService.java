@@ -32,8 +32,9 @@ public class RegisterService {
 	@POST
 	@Path("/register")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	//@Produces(MediaType.APPLICATION_JSON)
 	public Response register(User user, @Context HttpServletRequest request) {
+		System.out.print("registered");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
 		boolean reg = userDao.registerUser(user);
 		if (!reg) {

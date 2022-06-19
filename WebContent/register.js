@@ -16,7 +16,7 @@ $(document).ready(function() {
 		    	data: JSON.stringify({username: username, password: password, name: name, surname: surname, birthday: birthday, gender: gender}),
 		    	contentType: 'application/json',
 		    	success: function() {
-
+					
 				},
 				error: function(){
 					
