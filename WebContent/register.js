@@ -13,7 +13,7 @@ $(document).ready(function() {
 		    $('#success').hide();
 		    
 		    $.post({
-		    	url: 'rest/register/newUser',
+		    	url: 'rest/user/register',
 		    	data: JSON.stringify({username: username, password: password, name: name, surname: surname, birthday: birthday, gender: gender}),
 		    	contentType: 'application/json',
 		    	

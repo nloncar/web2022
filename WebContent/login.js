@@ -8,7 +8,7 @@ $(document).ready(function() {
 		$('#error').hide();
 		
 		$.post({
-			url: 'rest/login/user',			
+			url: 'rest/user/login',			
 			data: JSON.stringify({username: username, password: password}),
 			contentType: 'application/json',
 			
