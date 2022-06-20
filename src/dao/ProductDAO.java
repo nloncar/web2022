@@ -77,6 +77,7 @@ public class ProductDAO {
 			System.out.println(file.getCanonicalPath());
 			in = new BufferedReader(new FileReader(file));
 			String line, id = "", name = "", ocena = "", type = "";
+			String sadrzaj, status = "", radno_vreme = "";
 			StringTokenizer st;
 			while ((line = in.readLine()) != null) {
 				line = line.trim();
@@ -88,10 +89,14 @@ public class ProductDAO {
 					name = st.nextToken().trim();
 					ocena = st.nextToken().trim();
 					type = st.nextToken().trim();
+					sadrzaj = st.nextToken().trim();
+					status = st.nextToken().trim();
+					radno_vreme = st.nextToken().trim();
 				}
 				products.put(id, new Product(id, name, Double
 						.parseDouble(ocena), type ) );
 				System.out.println(type);
+				System.out.println(radno_vreme);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
