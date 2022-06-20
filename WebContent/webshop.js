@@ -13,7 +13,10 @@ function addProductTr(product) {
 	let tdNaziv = $('<td>' + product.name + '</td>');
 	let tdOcena = $('<td>' + product.ocena + '</td>');
 	let tdTip = $('<td>' + product.tip_objekta + '</td>');
-	tr.append(tdNaziv).append(tdOcena).append(tdTip);
+	let tdSad = $('<td>' + product.sadrzaj + '</td>');
+	let tdStatus = $('<td>' + product.status + '</td>');
+	let tdRV = $('<td>' + product.radno_vreme + '</td>');
+	tr.append(tdNaziv).append(tdOcena).append(tdTip).append(tdSad).append(tdStatus).append(tdRV);
 	tr.click(clickClosure(product));
 	$('#tabela tbody').append(tr);
 }
