@@ -12,18 +12,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import dao.UserDAO;
 import beans.User;
+import dao.UserDAO;
 
-@Path("/user")
+@Path("")
 public class UserService {
-
-ServletContext ctx;
+	
+	@Context
+	ServletContext ctx;
 	
 	public UserService() {
 		
 	}
-
+	
 	@PostConstruct
 	public void init() {
 		if (ctx.getAttribute("userDAO") == null) {
@@ -34,25 +35,39 @@ ServletContext ctx;
 	
 	@POST
 	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User login(User user, @Context HttpServletRequest request) {
-		System.out.print("login");
+	public Response login(User user, @Context HttpServletRequest request) {
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		User loggedInUser = userDao.loggedInUser(user.getUsername(), user.getPassword());
-		if (loggedInUser == null) {
-			return null;
+		User loggedUser = userDao.find(user.getUsername(), user.getPassword());
+		if (loggedUser == null) {
+			return Response.status(400).entity("Invalid username and/or password").build();
 		}
-		request.getSession().setAttribute("user", loggedInUser);
-		return loggedInUser;
+		request.getSession().setAttribute("user", loggedUser);
+		return Response.status(200).build();
 	}
 	
 	@POST
 	@Path("/register")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User register(User user, @Context HttpServletRequest request) {
-		System.out.print("registered");
+	public Response register(User user, @Context HttpServletRequest request) {
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		User regUser = userDao.registerUser(user);
-		return regUser;
+		userDao.RegisterUser(user);
+		return Response.status(200).build();
+	}
+	
+	@POST
+	@Path("/logout")
+	public void logout(@Context HttpServletRequest request) {
+		request.getSession().invalidate();
+	}
+	
+	@GET
+	@Path("/currentUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public User login(@Context HttpServletRequest request) {
+		return (User) request.getSession().getAttribute("user");
 	}
 }

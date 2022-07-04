@@ -1,16 +1,21 @@
 package beans;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
-
+public class User implements Serializable {
+	
 	String username;
 	String password;
 	String name;
 	String surname;
-	Date birthday;
+	String birthday;
 	String gender;
-	public User(String username, String password, String name, String surname, Date birthday, String gender) {
+	
+	public User() {
+	}
+	
+	public User(String username, String password, String name, String surname, String birthday, String gender) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -43,10 +48,10 @@ public class User {
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 	public String getGender() {
@@ -57,3 +62,4 @@ public class User {
 	}
 	
 }
+
