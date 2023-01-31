@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import beans.User;
 import dao.UserDAO;
 
-@Path("")
+@Path("/users")
 public class UserService {
 	
 	@Context
@@ -49,12 +49,12 @@ public class UserService {
 	
 	@POST
 	@Path("/register")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response register(User user, @Context HttpServletRequest request) {
+	public User register(User user, @Context HttpServletRequest request) {
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		userDao.RegisterUser(user);
-		return Response.status(200).build();
+		userDao.RegisterUser(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getBirthday(), user.getGender());
+		System.out.println(user.getUsername() + user.getPassword());
+		return user;
 	}
 	
 	@POST

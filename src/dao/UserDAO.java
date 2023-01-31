@@ -78,11 +78,16 @@ public class UserDAO {
 		}
 	}
 	
-	public boolean RegisterUser(User user)
+	public boolean RegisterUser(String username, String password, String name, String surname, String birthday, String gender)
 	{
-		if (users.containsKey(user.getUsername())) {
+		
+		System.out.println(username + password);
+		if (users.containsKey(username)) {
 			return false;
 		}
+
+		User user = new User(username, password, name, surname, birthday, gender);
+		
 		BufferedWriter out = null;
 		try 
 		{

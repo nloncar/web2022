@@ -9,7 +9,7 @@ $(document).ready(function() {
 		    let gender = $('input[name="gender"]').val();
 		    
 		    $.post({
-		    	url: 'rest/register',
+		    	url: '../web2022/rest/users/register',
 		    	data: JSON.stringify({username: username, password: password, name: name, surname: surname, birthday: birthday, gender: gender}),
 		    	contentType: 'application/json',
 		    	
@@ -21,7 +21,7 @@ success: function(data) {
 				else {
 					$('#success').text('Registracija uspesna.');
 					$("#success").show().delay(3000).fadeOut(function(){
-						window.location.href="/login.html";
+						window.location.href="login.html";
 					});
 				}
 			}

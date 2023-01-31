@@ -6,7 +6,7 @@ $(document).ready(function() {
 		$('#error').hide();
 		// url: bazna putanja do rest servisa / putanja do servisa / putanja do metode u tom servisu 
 		$.post({
-			url: 'rest/login',
+			url: '../web2022/rest/users/login',
 			data: JSON.stringify({username: username, password: password}),
 			contentType: 'application/json',
 			success: function(product) {
