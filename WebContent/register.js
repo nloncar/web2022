@@ -21,7 +21,7 @@ success: function(data) {
 				else {
 					$('#success').text('Registracija uspesna.');
 					$("#success").show().delay(3000).fadeOut(function(){
-						window.location.href="login.html";
+						//window.location.href="login.html";
 					});
 				}
 			}

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -16,10 +17,14 @@ import beans.User;
 import dao.UserDAO;
 
 @Path("/users")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class UserService {
 	
 	@Context
 	ServletContext ctx;
+	
+	User loggedUser;
 	
 	public UserService() {
 		
@@ -44,6 +49,8 @@ public class UserService {
 			return Response.status(400).entity("Invalid username and/or password").build();
 		}
 		request.getSession().setAttribute("user", loggedUser);
+		this.loggedUser = loggedUser;
+		System.out.println("loged");
 		return Response.status(200).build();
 	}
 	
@@ -51,9 +58,18 @@ public class UserService {
 	@Path("/register")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User register(User user, @Context HttpServletRequest request) {
+		System.out.println("reg");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		userDao.RegisterUser(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getBirthday(), user.getGender());
-		System.out.println(user.getUsername() + user.getPassword());
+		User userReg = userDao.RegisterUser(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getBirthday(), user.getGender());
+		return userReg;
+	}
+	
+	@PUT
+	@Path("/edit")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User edit(User user, @Context HttpServletRequest request) {
+		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+		userDao.editUser(this.loggedUser.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getBirthday(), user.getGender());
 		return user;
 	}
 	

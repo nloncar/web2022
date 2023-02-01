@@ -5,6 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,43 +81,70 @@ public class UserDAO {
 		}
 	}
 	
-	public boolean RegisterUser(String username, String password, String name, String surname, String birthday, String gender)
+	public User editUser(String username, String password, String name, String surname, String birthday, String gender)
+	{
+		User user = new User(username, password, name, surname, birthday, gender);
+		users.put(username, user);
+		return user;
+	}
+	
+	public User RegisterUser(String username, String password, String name, String surname, String birthday, String gender)
 	{
 		
 		System.out.println(username + password);
 		if (users.containsKey(username)) {
-			return false;
+			return null;
 		}
 
 		User user = new User(username, password, name, surname, birthday, gender);
+		users.put(username, user);
+		System.out.println("added");
+		writeUsers();
+		return user;
+	}
+	
+	public boolean writeUsers()
+	{
+		File file = new File(this.contextPath + "/users.txt");
 		
-		BufferedWriter out = null;
+		if(!file.exists()){
+	     	   try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	     	}
+		
+		System.out.println(this.contextPath + "/users.txt");
+    	PrintWriter out; 
+    	
 		try 
 		{
-			File file = new File(this.contextPath + "/users.txt");
-	    	if(!file.exists()){
-	     	   file.createNewFile();
-	     	}
-	    	users.put(user.getUsername(), user);
-			out = new BufferedWriter(new FileWriter(file, true));
-			out.newLine();
-			out.write(user.getUsername() + ";" + user.getPassword() + ";" + user.getName()
-			+ ";" + user.getSurname() + ";" + user.getBirthday() + ";" + user.getGender());
+			ArrayList<User> usersBase = new ArrayList<User>(this.users.values()); 
+			out = new PrintWriter(file);
+	    	System.out.println("writing");
+	    	
+			for(User user : usersBase)
+			{
+				out.print(user.getUsername() + ";" + user.getPassword() + ";" + user.getName()
+				+ ";" + user.getSurname() + ";" + user.getBirthday() + ";" + user.getGender());
+				
+				out.print(System.getProperty("line.separator"));
+							
+				
+				System.out.println("written " +user.getUsername() + " " + user.getGender());
+			}
+			out.close();
+			
 			return true;
 		}
 		catch (Exception ex) {
 		ex.printStackTrace();
 		return false;
-	} finally {
-		if (out != null) {
-			try {
-				out.close();
-			}
-			catch (Exception e) { 
-			}
-		}
 	}
-	}
+}
+	
 	
 	
 }
