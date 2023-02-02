@@ -10,8 +10,9 @@ $(document).ready(function() {
 			data: JSON.stringify({username: username, password: password}),
 			contentType: 'application/json',
 			success: function(product) {
-				$('#success').text('Korisnik je uspesno prijavljen.');
-				$("#success").show().delay(3000).fadeOut();
+				//$('#success').text('Korisnik je uspesno prijavljen.');
+				//$("#success").show().delay(3000).fadeOut();
+				window.location.href="userProfile.html";
 			},
 			error: function(message) {
 				$('#error').text(message.responseText);

@@ -49,6 +49,7 @@ public class UserService {
 			return Response.status(400).entity("Invalid username and/or password").build();
 		}
 		request.getSession().setAttribute("user", loggedUser);
+		System.out.println(((User) request.getSession().getAttribute("user")).getUsername());
 		this.loggedUser = loggedUser;
 		System.out.println("loged");
 		return Response.status(200).build();
@@ -83,7 +84,10 @@ public class UserService {
 	@Path("/currentUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User login(@Context HttpServletRequest request) {
-		return (User) request.getSession().getAttribute("user");
+	public User currentUser(@Context HttpServletRequest request) {
+		System.out.println("loaded");
+		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+		User currentUser = (User) request.getSession().getAttribute("user");
+		return currentUser;
 	}
 }
