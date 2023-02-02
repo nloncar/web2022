@@ -13,10 +13,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import beans.Customer;
 import beans.User;
 
 public class UserDAO {
+	
 	private Map<String, User> users = new HashMap<>();
+	private Map<String, Customer> customers = new HashMap<>();
+	
 	private String contextPath;
 	
 	public UserDAO() {

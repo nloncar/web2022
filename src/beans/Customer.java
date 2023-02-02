@@ -8,7 +8,7 @@ public class Customer extends User implements Serializable{
 	
 	enum Tip{osnovni, bronzani, srebrni, zlatni}
 	
-	private int clanarina;
+	private Membership membership;
 	private List<Product> poseceniObjekti;
 	private int bodovi;
 	private Tip tip;
@@ -16,11 +16,11 @@ public class Customer extends User implements Serializable{
 	public Customer() {
 		super();
 	}
-	public int getClanarina() {
-		return clanarina;
+	public Membership getMembership() {
+		return membership;
 	}
-	public void setClanarina(int clanarina) {
-		this.clanarina = clanarina;
+	public void setClanarina(Membership membership) {
+		this.membership = membership;
 	}
 	public List<Product> getPoseceniObjekti() {
 		return poseceniObjekti;
@@ -60,7 +60,7 @@ public class Customer extends User implements Serializable{
 	}
 	public Customer(String username, String password, String name, String surname, String birthday, String gender) {
 		super(username, password, name, surname, birthday, gender);
-		this.clanarina = 0;
+		this.membership = null;
 		this.poseceniObjekti = new ArrayList<Product>();
 		this.bodovi = 0;
 		this.tip = Tip.osnovni;
