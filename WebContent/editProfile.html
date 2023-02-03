@@ -1,0 +1,21 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="editProfile.js"></script>
+</head>
+<body>
+	<form id="forma">
+		<table>
+			<tr><td>Lozinka</td><td><input required type="password" name="password" id="password"></td></tr>
+		    <tr><td>Ime:</td><td><input required type="text" name="name" id = "name"></td></tr>
+			<tr><td>Prezime:</td><td><input required type="text" name="surname" id="surname"></td></tr>
+			<tr><td>Datum rodjenja:</td><td><input required type="text" name="birthday" id="birthday"></td></tr>
+			<tr><td>Pol:</td><td>Muski<input required type = "radio" name = "gender" id="genderMale" value = "Muski">Zenski<input required type = "radio" id="genderFemale" name = "gender" value = "Zenski"></td></tr>
+			<tr id="errorEmptyField" hidden="true" style="color:red"><td>Popunite sva polja</td></tr>
+			<tr><td><input  type="submit" value="Sacuvaj"></td><td><a><input  type="button" onclick="location.href='userProfile.html';" value="Nazad" /></a></td></tr>
+		</table>
+	</form>
+</body>
+</html>

@@ -23,9 +23,7 @@ public class UserService {
 	
 	@Context
 	ServletContext ctx;
-	
-	User loggedUser;
-	
+
 	public UserService() {
 		
 	}
@@ -50,8 +48,7 @@ public class UserService {
 		}
 		request.getSession().setAttribute("user", loggedUser);
 		System.out.println(((User) request.getSession().getAttribute("user")).getUsername());
-		this.loggedUser = loggedUser;
-		System.out.println("loged");
+		System.out.println("logged");
 		return Response.status(200).build();
 	}
 	
@@ -65,12 +62,13 @@ public class UserService {
 		return userReg;
 	}
 	
-	@PUT
+	@POST
 	@Path("/edit")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User edit(User user, @Context HttpServletRequest request) {
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		userDao.editUser(this.loggedUser.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getBirthday(), user.getGender());
+		userDao.editUser(((User) request.getSession().getAttribute("user")).getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getBirthday(), user.getGender());
+		
 		return user;
 	}
 	

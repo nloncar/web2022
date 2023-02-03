@@ -87,8 +87,11 @@ public class UserDAO {
 	
 	public User editUser(String username, String password, String name, String surname, String birthday, String gender)
 	{
+		System.out.println("editing:");
 		User user = new User(username, password, name, surname, birthday, gender);
 		users.put(username, user);
+		writeUsers();
+		System.out.println(user.getUsername() + "se sad zove " + user.getName());
 		return user;
 	}
 	
