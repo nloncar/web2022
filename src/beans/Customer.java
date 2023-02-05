@@ -16,10 +16,11 @@ public class Customer extends User implements Serializable{
 	public Customer() {
 		super();
 	}
+
 	public Membership getMembership() {
 		return membership;
 	}
-	public void setClanarina(Membership membership) {
+	public void setMembership(Membership membership) {
 		this.membership = membership;
 	}
 	public List<Product> getPoseceniObjekti() {

@@ -8,13 +8,13 @@ public class TrainingSession {
 	
 	private String uniqueID;
 	private String name;
-	private String coach; //username
+	private User coach;
 	private int duration; //minutes
 	private String description;
-	private ArrayList <String> attendees; //usernames
+	private ArrayList <User> attendees;
 	private SessionType type;
 	
-	public TrainingSession(String name, String coach, int duration, String description, SessionType type) {
+	public TrainingSession(String name, User coach, int duration, String description, SessionType type) {
 		super();
 		uniqueID = UUID.randomUUID().toString();
 		this.name = name;
@@ -33,11 +33,11 @@ public class TrainingSession {
 		this.name = name;
 	}
 
-	public String getCoach() {
+	public User getCoach() {
 		return coach;
 	}
 
-	public void setCoach(String coach) {
+	public void setCoach(User coach) {
 		this.coach = coach;
 	}
 
@@ -57,11 +57,11 @@ public class TrainingSession {
 		this.description = description;
 	}
 
-	public ArrayList<String> getAttendees() {
+	public ArrayList<User> getAttendees() {
 		return attendees;
 	}
 
-	public void setAttendees(ArrayList<String> attendees) {
+	public void setAttendees(ArrayList<User> attendees) {
 		this.attendees = attendees;
 	}
 

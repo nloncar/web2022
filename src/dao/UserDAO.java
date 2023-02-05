@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,14 +17,18 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import beans.Customer;
+import beans.Membership;
+import beans.MembershipType;
 import beans.User;
 
 public class UserDAO {
 	
 	private Map<String, User> users = new HashMap<>();
+	private Map<String, Membership> memberships = new HashMap<>();
 	private Map<String, Customer> customers = new HashMap<>();
 	
 	private String contextPath;
+	private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-mm-DD");  
 	
 	public UserDAO() {
 		
@@ -30,6 +37,7 @@ public class UserDAO {
 
 	public UserDAO(String contextPath) {
 		loadUsers(contextPath);
+		loadMemberships(contextPath);
 		this.contextPath = contextPath;
 	}
 	
@@ -48,7 +56,6 @@ public class UserDAO {
 	public Collection<User> findAll() {
 		return users.values();
 	}
-	
 
 	private void loadUsers(String contextPath) {
 		BufferedReader in = null;
@@ -151,7 +158,175 @@ public class UserDAO {
 		return false;
 	}
 }
-	
-	
-	
+		
+		//MEMBERSHIPS//
+		
+		private void loadMemberships(String contextPath) {
+			BufferedReader in = null;
+			try {
+				File file = new File(contextPath + "/memberships.txt");
+				in = new BufferedReader(new FileReader(file));
+				String line;
+				StringTokenizer st;
+				while ((line = in.readLine()) != null) {
+					line = line.trim();
+					if (line.equals("") || line.indexOf('#') == 0)
+						continue;
+					st = new StringTokenizer(line, ";");
+					while (st.hasMoreTokens()) {
+						String username = st.nextToken().trim();
+						MembershipType type = MembershipType.valueOf(st.nextToken().trim());
+						LocalDate billingDate = LocalDate.parse(st.nextToken().trim(), dateFormatter);
+						LocalDate expirationDate = LocalDate.parse(st.nextToken().trim(), dateFormatter);
+						Boolean status = Boolean.parseBoolean(st.nextToken().trim());
+						int maxEntries = Integer.parseInt(st.nextToken().trim());
+						int usedEntries = Integer.parseInt(st.nextToken().trim());
+						int price = Integer.parseInt(st.nextToken().trim());
+						memberships.put(username, new Membership(username, type, billingDate, expirationDate, status, maxEntries, usedEntries, price));
+					}
+					
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			} finally {
+				if (in != null) {
+					try {
+						in.close();
+					}
+					catch (Exception e) { }
+				}
+			}
+		}
+		
+		public boolean writeMemberships()
+		{
+			File file = new File(this.contextPath + "/memberships.txt");
+			
+			if(!file.exists()){
+		     	   try {
+					file.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		     	}
+	    	PrintWriter out; 
+	    	
+			try 
+			{
+				ArrayList<Membership> membershipBase = new ArrayList<Membership>(this.memberships.values()); 
+				out = new PrintWriter(file);
+		    	System.out.println("writing");
+		    	
+				for(Membership membership : membershipBase)
+				{
+					out.print(membership.getCustomer() + ";" + membership.getType().toString() + ";" + membership.getBillingDate().toString()
+					+ ";" + membership.getExpirationDate().toString() + ";" + membership.getStatus().toString() + ";" + membership.getMaxEntries() + ";" + membership.getUsedEntries()
+					+ ";" + membership.getPrice());
+					
+					out.print(System.getProperty("line.separator"));
+								
+				}
+				out.close();
+				
+				return true;
+			}
+			catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+		
+		public Collection<Membership> findAllMemberships()
+		{
+			return memberships.values();
+		}
+		
+		public ArrayList<Membership> getMemberPackages()
+		{
+			ArrayList<Membership> ret = new ArrayList<Membership>();
+			ArrayList<Membership> memberships = new ArrayList<Membership>(this.memberships.values()); 
+			for(Membership membership: memberships)
+			{
+				if(membership.getCustomer() == null)
+				{
+					ret.add(membership);
+				}
+			}
+			return ret;
+		}
+		
+		public Membership createMembership(String customer, MembershipType type, LocalDate billingDate)
+		{
+			LocalDate expirationDate = billingDate;
+			int maxEntries = 0;
+			int price = 0;
+			if(type.toString() == "trial")
+			{
+				maxEntries = 4;
+				expirationDate = billingDate.plusDays(3);
+				price = 500;
+			}
+			else if (type.toString() == "monthly")
+			{
+				maxEntries = 10;
+				expirationDate = billingDate.plusMonths(1);
+				price = 5000;
+			}
+			else if (type.toString() == "halfyearly")
+			{
+				maxEntries = 80;
+				expirationDate = billingDate.plusMonths(6);
+				price = 25000;
+			}
+			else if (type.toString() == "yearly")
+			{
+				maxEntries = 0;
+				expirationDate = billingDate.plusYears(1);
+				price = 50000;
+			}
+			
+			Membership membership = new Membership(customer, type, billingDate, expirationDate, true, maxEntries, 0, price);
+			memberships.put(customer, membership);
+			writeMemberships();
+			
+			/*Customer toAdd = customers.get(membership.getCustomer());
+			toAdd.setMembership(membership);*/
+			
+			return membership;
+		}
+		
+		public void membershipExpired()
+		{
+			ArrayList<Membership> memberships = new ArrayList<Membership>(this.memberships.values()); 
+			for(Membership membership: memberships)
+			{
+				int points = 0;
+				if(membership.getExpirationDate().isAfter(LocalDate.now()))
+				{
+					membership.setStatus(false);
+					if(membership.getMaxEntries() == 0)
+					{
+						points = membership.getPrice() / 1000 * membership.getUsedEntries();
+					}
+					else
+					{
+						if(membership.getUsedEntries() < membership.getMaxEntries()/3)
+						{
+							points = membership.getPrice()/1000 * 133 * 4;
+						}
+						else
+						{
+							points = membership.getPrice() / 1000 * membership.getUsedEntries();
+						}
+					}
+					this.memberships.put(membership.getCustomer(), membership);
+					writeMemberships();
+					/*Customer customer = customers.get(membership.getCustomer());
+					customer.setBodovi(customer.getBodovi() + points);
+					*/
+				}
+			}
+		}
 }
+	

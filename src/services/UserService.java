@@ -53,6 +53,14 @@ public class UserService {
 	}
 	
 	@POST
+	@Path("/refresh")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void refreshUser(@Context HttpServletRequest request)
+	{
+		
+	}
+	
+	@POST
 	@Path("/register")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User register(User user, @Context HttpServletRequest request) {
@@ -69,7 +77,10 @@ public class UserService {
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
 		userDao.editUser(((User) request.getSession().getAttribute("user")).getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getBirthday(), user.getGender());
 		
-		return user;
+		User loggedUser = userDao.find(user.getUsername(), user.getPassword());
+		
+		request.getSession().setAttribute("user", loggedUser);
+		return loggedUser;
 	}
 	
 	@POST

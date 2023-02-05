@@ -37,7 +37,7 @@ public class TrainingSessionDAO {
 		
 	}
 	
-	public TrainingSession addSession(String name, String coach, int duration, String description, String type)
+	public TrainingSession addSession(String name, User coach, int duration, String description, String type)
 	{
 		TrainingSession session = new TrainingSession(name, coach, duration, description, SessionType.valueOf(type));
 		sessions.put(session.getUniqueID(), session);
@@ -45,13 +45,13 @@ public class TrainingSessionDAO {
 		return session;
 	}
 	
-	public ArrayList<TrainingSession> getByUser(String username)
+	public ArrayList<TrainingSession> getByUser(User user)
 	{
 		ArrayList<TrainingSession> sessions = new ArrayList<TrainingSession>(this.sessions.values()); 
 		
 		for(TrainingSession t : sessions)
 		{
-			if(t.getAttendees().contains(username))
+			if(t.getAttendees().contains(user))
 			{
 				sessions.add(t);
 			}
@@ -59,13 +59,32 @@ public class TrainingSessionDAO {
 		return sessions;
 	}
 	
-	public ArrayList<TrainingSession> getByCoach(String username)
+	public TrainingSession changeAttendance(String id, User user)
+	{
+		TrainingSession session = sessions.get(id);
+		ArrayList<User> attendees = session.getAttendees();
+		if(attendees.contains(user))
+		{
+			attendees.remove(user);
+		}
+		else
+		{
+			attendees.add(user);
+		}
+		
+		session.setAttendees(attendees);
+		this.sessions.put(id, session);
+		writeSession();
+		return  session;
+	}
+	
+	public ArrayList<TrainingSession> getByCoach(User coach)
 	{
 		ArrayList<TrainingSession> sessions = new ArrayList<TrainingSession>(this.sessions.values()); 
 		
 		for(TrainingSession t : sessions)
 		{
-			if(t.getCoach().equals(username))
+			if(t.getCoach().equals(coach))
 			{
 				sessions.add(t);
 			}

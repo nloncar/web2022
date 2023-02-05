@@ -1,2 +1,2 @@
-pera;pera;Petar;Petrovic;01-01-1990;Muski
-jovana;jovana;Jovana;Jovanovic;10-10-1989;Zenski
+pera;pera;Petar;Petrovic;1990-01-01;Muski
+jovana;jovana;Jovana;Jovanovic;1989-10-10;Zenski

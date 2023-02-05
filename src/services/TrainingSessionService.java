@@ -18,6 +18,7 @@ import beans.TrainingSession;
 import beans.User;
 import dao.ProductDAO;
 import dao.TrainingSessionDAO;
+import dao.UserDAO;
 
 @Path("/sessions") 
 public class TrainingSessionService {
@@ -38,16 +39,16 @@ public class TrainingSessionService {
 	@GET
 	@Path("/getByUser")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<TrainingSession> getByUser(String username, @Context HttpServletRequest request) {
+	public ArrayList<TrainingSession> getByUser(User user, @Context HttpServletRequest request) {
 		TrainingSessionDAO dao = (TrainingSessionDAO) ctx.getAttribute("trainingSessionDAO");
-		return dao.getByUser(username);
+		return dao.getByUser(user);
 	}
 	
 	@GET
 	@Path("/getByCoach")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<TrainingSession> getByCoach(String username, @Context HttpServletRequest request) {
+	public ArrayList<TrainingSession> getByCoach(User coach, @Context HttpServletRequest request) {
 		TrainingSessionDAO dao = (TrainingSessionDAO) ctx.getAttribute("trainingSessionDAO");
-		return dao.getByCoach(username);
+		return dao.getByCoach(coach);
 	}
 }

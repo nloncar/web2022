@@ -5,36 +5,31 @@ import java.time.LocalDate;
 
 public class Membership {
 
-	enum Type {month, year};
 	
-	private String id;
-	private Type type;
+	private String customer;
+	private MembershipType type;
 	private LocalDate billingDate;
 	private LocalDate expirationDate;
-	private Customer customer;
 	private Boolean status;
-	private int entries; //-1 = unlimited
-	public Membership(String id, Type type, LocalDate billingDate, LocalDate expirationDate, Customer customer,
-			Boolean status, int entries) {
+	private int maxEntries; //0 = unlimited
+	private int usedEntries;
+	private int price;
+	public Membership(String customer, MembershipType type, LocalDate billingDate, LocalDate expirationDate,
+			Boolean status, int maxEntries, int usedEntries, int Price) {
 		super();
-		this.id = id;
+		this.customer = customer;
 		this.type = type;
 		this.billingDate = billingDate;
 		this.expirationDate = expirationDate;
-		this.customer = customer;
 		this.status = status;
-		this.entries = entries;
+		this.maxEntries = maxEntries;
+		this.usedEntries = usedEntries;
+		this.price = price;
 	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public Type getType() {
+	public MembershipType getType() {
 		return type;
 	}
-	public void setType(Type type) {
+	public void setType(MembershipType type) {
 		this.type = type;
 	}
 	public LocalDate getBillingDate() {
@@ -49,10 +44,10 @@ public class Membership {
 	public void setExpirationDate(LocalDate expirationDate) {
 		this.expirationDate = expirationDate;
 	}
-	public Customer getCustomer() {
+	public String getCustomer() {
 		return customer;
 	}
-	public void setCustomer(Customer customer) {
+	public void setCustomer(String customer) {
 		this.customer = customer;
 	}
 	public Boolean getStatus() {
@@ -61,12 +56,25 @@ public class Membership {
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
-	public int getEntries() {
-		return entries;
+	public int getMaxEntries() {
+		return maxEntries;
 	}
-	public void setEntries(int entries) {
-		this.entries = entries;
+	public void setMaxEntries(int maxEntries) {
+		this.maxEntries = maxEntries;
 	}
+	public int getUsedEntries() {
+		return usedEntries;
+	}
+	public void setUsedEntries(int usedEntries) {
+		this.usedEntries = usedEntries;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
 	
 	
 }
