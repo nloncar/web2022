@@ -62,7 +62,7 @@ public class ProductDAO {
 	}
 
 	/**
-	 * Uèitava korisnike iz WebContent/users.txt fajla i dodaje ih u mapu {@link #products}.
+	 * Uèitava objekte iz WebContent/products.txt fajla i dodaje ih u mapu {@link #products}.
 	 * Kljuè je id proizovda.
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
