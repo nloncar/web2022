@@ -9,16 +9,11 @@ import java.util.StringTokenizer;
 
 import beans.Product;
 
-/***
- * Klasa namenjena da uèita proizvode iz fajla i pruža operacije nad njima (poput pretrage).
- * Proizvodi se nalaze u fajlu WebContent/products.txt u obliku: <br>
- * id;naziv;jedinicna cena
- * @author Lazar
- *
- */
+
 public class ProductDAO {
 	
 	private HashMap<String, Product> products = new HashMap<String, Product>();
+	private String contextPath;
 	
 	public ProductDAO() {
 		
@@ -29,6 +24,7 @@ public class ProductDAO {
 	 */
 	public ProductDAO(String contextPath) {
 		loadProducts(contextPath);
+		this.contextPath = contextPath;
 	}
 
 	/***
