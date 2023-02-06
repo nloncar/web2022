@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 import beans.Customer;
 import beans.Membership;
 import beans.MembershipType;
+import beans.TrainingSession;
 import beans.User;
 
 public class UserDAO {
@@ -174,6 +175,7 @@ public class UserDAO {
 						continue;
 					st = new StringTokenizer(line, ";");
 					while (st.hasMoreTokens()) {
+						String id = st.nextToken().trim();
 						String username = st.nextToken().trim();
 						MembershipType type = MembershipType.valueOf(st.nextToken().trim());
 						LocalDate billingDate = LocalDate.parse(st.nextToken().trim(), dateFormatter);
@@ -182,7 +184,7 @@ public class UserDAO {
 						int maxEntries = Integer.parseInt(st.nextToken().trim());
 						int usedEntries = Integer.parseInt(st.nextToken().trim());
 						int price = Integer.parseInt(st.nextToken().trim());
-						memberships.put(username, new Membership(username, type, billingDate, expirationDate, status, maxEntries, usedEntries, price));
+						memberships.put(username, new Membership(id, username, type, billingDate, expirationDate, status, maxEntries, usedEntries, price));
 					}
 					
 				}
@@ -256,8 +258,9 @@ public class UserDAO {
 			return ret;
 		}
 		
-		public Membership createMembership(String customer, MembershipType type, LocalDate billingDate)
+		public Membership createMembership(String customer, String type)
 		{
+			LocalDate billingDate = LocalDate.now();
 			LocalDate expirationDate = billingDate;
 			int maxEntries = 0;
 			int price = 0;
@@ -286,8 +289,8 @@ public class UserDAO {
 				price = 50000;
 			}
 			
-			Membership membership = new Membership(customer, type, billingDate, expirationDate, true, maxEntries, 0, price);
-			memberships.put(customer, membership);
+			Membership membership = new Membership(null, customer, MembershipType.valueOf(type), billingDate, expirationDate, true, maxEntries, 0, price);
+			memberships.put(membership.getId(), membership);
 			writeMemberships();
 			
 			/*Customer toAdd = customers.get(membership.getCustomer());
@@ -320,13 +323,27 @@ public class UserDAO {
 							points = membership.getPrice() / 1000 * membership.getUsedEntries();
 						}
 					}
-					this.memberships.put(membership.getCustomer(), membership);
+					this.memberships.put(membership.getId(), membership);
 					writeMemberships();
 					/*Customer customer = customers.get(membership.getCustomer());
 					customer.setBodovi(customer.getBodovi() + points);
 					*/
 				}
 			}
+		}
+		
+		public Membership getMembershipByUser(String username)
+		{
+			ArrayList<Membership> membershipBase = new ArrayList<Membership>(this.memberships.values()); 
+			
+			for(Membership m : membershipBase)
+			{
+				if(m.getCustomer().equals(username))
+				{
+					return m;
+				}
+			}
+			return null;
 		}
 }
 	

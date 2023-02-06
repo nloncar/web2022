@@ -1,5 +1,8 @@
 package services;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Membership;
+import beans.MembershipType;
 import beans.User;
 import dao.UserDAO;
 
@@ -98,5 +103,34 @@ public class UserService {
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
 		User currentUser = (User) request.getSession().getAttribute("user");
 		return currentUser;
+	}
+	
+	@GET
+	@Path("/memberPackages")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Membership> memberPackages(@Context HttpServletRequest request) {
+		System.out.println("loaded");
+		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+		return userDao.getMemberPackages();
+	}
+	
+	@POST
+	@Path("/addMembership")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Membership addMembership(String membershipType, @Context HttpServletRequest request)
+	{
+		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+		userDao.createMembership(((User) request.getSession().getAttribute("user")).getUsername(), membershipType);
+		return userDao.getMembershipByUser(((User) request.getSession().getAttribute("user")).getUsername());
+	}
+	
+	@GET
+	@Path("/getCurrentMembership")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Membership getMembership(@Context HttpServletRequest request)
+	{
+		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
+		return userDao.getMembershipByUser(((User) request.getSession().getAttribute("user")).getUsername());
 	}
 }

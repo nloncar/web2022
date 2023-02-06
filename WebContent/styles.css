@@ -5,9 +5,17 @@ body {
 tr.selected {
 	background: lightblue;
 }
+
 tr {
 	cursor: pointer;
+	background: "lightgrey";
 }
+
+table {
+	border: "1";
+}
+
+
 
 #error {
 	color: red;

@@ -1,11 +1,11 @@
 package beans;
 
-import java.rmi.server.UID;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Membership {
 
-	
+	private String id;
 	private String customer;
 	private MembershipType type;
 	private LocalDate billingDate;
@@ -14,9 +14,17 @@ public class Membership {
 	private int maxEntries; //0 = unlimited
 	private int usedEntries;
 	private int price;
-	public Membership(String customer, MembershipType type, LocalDate billingDate, LocalDate expirationDate,
+	public Membership(String id, String customer, MembershipType type, LocalDate billingDate, LocalDate expirationDate,
 			Boolean status, int maxEntries, int usedEntries, int Price) {
 		super();
+		if(id == null)
+		{
+			this.id = UUID.randomUUID().toString();
+		}
+		else
+		{
+			this.id = id;
+		}
 		this.customer = customer;
 		this.type = type;
 		this.billingDate = billingDate;
@@ -73,6 +81,12 @@ public class Membership {
 	}
 	public void setPrice(int price) {
 		this.price = price;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	
