@@ -32,22 +32,22 @@ $(document).ready(function() {
 	});
 	
 	$('button#dodaj').click(function() {
-		$('form#forma').show();
+		$('form#pretrazi').show();
 	});
 	
-	$('form#forma').submit(function(event) {
+	$('form#pretrazi').submit(function(event) {
 		event.preventDefault();
 		let name = $('input[name="name"]').val();
 		let price = $('input[name="price"]').val();
-		let type = $('input[name="type"]').val();
-		if (!price || isNaN(price)) {
-			$('#error').text('Cena mora biti broj!');
+		let type = $('input[name="kategorija"]').val();
+		if (!name || isNaN(name)) {
+			$('#error').text('Morate uneti naziv!');
 			$("#error").show().delay(3000).fadeOut();
 			return;
 		}
 		$('p#error').hide();
 		$.post({
-			url: 'rest/products',
+			url: 'rest/products/find',
 			data: JSON.stringify({id: '', name: name, price: price, type: type}),
 			contentType: 'application/json',
 			success: function(product) {

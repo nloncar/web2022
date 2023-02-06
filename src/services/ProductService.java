@@ -6,7 +6,9 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -32,6 +34,8 @@ public class ProductService {
 		if (ctx.getAttribute("productDAO") == null) {
 	    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("productDAO", new ProductDAO(contextPath));
+			
+			System.out.println( "Inicijalizacija: " + contextPath );
 		}
 	}
 	
@@ -41,6 +45,14 @@ public class ProductService {
 	public Collection<Product> getProducts() {
 		ProductDAO dao = (ProductDAO) ctx.getAttribute("productDAO");
 		return dao.findAll();
+	}
+	
+	@PUT
+	@Path("/find/{naziv}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Product pretragaArtikla(@PathParam("naziv") String naziv) {
+		ProductDAO dao = (ProductDAO) ctx.getAttribute("productDAO");
+		return dao.findProduct(naziv);
 	}
 	
 	@POST

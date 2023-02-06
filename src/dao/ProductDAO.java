@@ -39,8 +39,8 @@ public class ProductDAO {
 	 *  Vraca proizvod na osnovu njegovog id-a. 
 	 *  @return Proizvod sa id-em ako postoji, u suprotnom null
 	 */
-	public Product findProduct(String id) {
-		return products.containsKey(id) ? products.get(id) : null;
+	public Product findProduct(String naziv) {
+		return products.containsKey(naziv) ? products.get(naziv) : null;
 	}
 	
 	/***

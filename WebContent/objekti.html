@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Web shop</title>
+		<title>Sportski objekti</title>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" type="text/css" href="styles.css">
 		<script src="jquery-3.3.1.min.js"></script>
 		<script src="webshop.js"></script>
 	</head>
 	<body>
-		Raspoloživi proizvodi:
+		Sportski objekti:
 		<table border="1" id="tabela">
 			<thead>
 				<tr bgcolor="lightgrey">
@@ -25,12 +25,19 @@
 
 		<p><button id="dodaj">Pretraži</button></p>
 		
-		<form id="forma" hidden="true">
+		<form id="pretrazi" hidden="true">
 			<table>
 				<tr><td>Naziv</td><td><input type="text" name="name"></td></tr>
 				<tr><td>Ocena</td><td><input type="number" name="price"></td></tr>
-				<tr><td>Tip objekta</td><td><input type="text" name="type"></td></tr>
-				<tr><td><input type="submit" value="Pošalji"></td></tr>
+				<tr><td>Tip objekta</td><td><select name="kategorija">
+					<option >Teretana</option>
+					<option >Plesni studio</option>
+					<option >Bazen</option>
+					<option >Teniski teren</option>
+					<option >Fudbalski teren</option>
+					<option >Košarkaški teren</option>
+					</select></td></tr>
+				<tr><td><input type="submit" value="Pretrazi"></td></tr>
 			</table>
 			<p id="error" hidden="true"></p>
 			<p id="success" hidden="true"></p>
