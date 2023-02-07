@@ -10,7 +10,7 @@ public class Coach extends User {
 	}
 
 	public Coach(String username, String password, String name, String surname, String birthday, String gender) {
-		super(username, password, name, surname, birthday, gender);
+		super(username, password, name, surname, birthday, gender, "coach");
 	}
 
 	public TrainingSession[] getSessions() {

@@ -11,11 +11,13 @@ public class User implements Serializable {
 	String surname;
 	String birthday;
 	String gender;
+	UserType type;
+	
 	
 	public User() {
 	}
 	
-	public User(String username, String password, String name, String surname, String birthday, String gender) {
+	public User(String username, String password, String name, String surname, String birthday, String gender, String type) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -23,6 +25,7 @@ public class User implements Serializable {
 		this.surname = surname;
 		this.birthday = birthday;
 		this.gender = gender;
+		this.type = UserType.valueOf(type);
 	}
 	public String getUsername() {
 		return username;
@@ -59,6 +62,14 @@ public class User implements Serializable {
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public UserType getType() {
+		return type;
+	}
+
+	public void setType(UserType type) {
+		this.type = type;
 	}
 	
 }

@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 import beans.Customer;
 import beans.Membership;
 import beans.MembershipType;
+import beans.Product;
 import beans.TrainingSession;
 import beans.User;
 
@@ -77,7 +78,8 @@ public class UserDAO {
 					String surname = st.nextToken().trim();
 					String birthday = st.nextToken().trim();
 					String gender = st.nextToken().trim();
-					users.put(username, new User(username, password, name, surname, birthday, gender));
+					String type = st.nextToken().trim();
+					users.put(username, new User(username, password, name, surname, birthday, gender, type));
 				}
 				
 			}
@@ -96,7 +98,7 @@ public class UserDAO {
 	public User editUser(String username, String password, String name, String surname, String birthday, String gender)
 	{
 		System.out.println("editing:");
-		User user = new User(username, password, name, surname, birthday, gender);
+		User user = new User(username, password, name, surname, birthday, gender, "customer");
 		users.put(username, user);
 		writeUsers();
 		System.out.println(user.getUsername() + "se sad zove " + user.getName());
@@ -111,7 +113,7 @@ public class UserDAO {
 			return null;
 		}
 
-		User user = new User(username, password, name, surname, birthday, gender);
+		User user = new User(username, password, name, surname, birthday, gender, "customer");
 		users.put(username, user);
 		System.out.println("added");
 		writeUsers();
@@ -149,6 +151,97 @@ public class UserDAO {
 							
 				
 				System.out.println("written " +user.getUsername() + " " + user.getGender());
+			}
+			out.close();
+			
+			return true;
+		}
+		catch (Exception ex) {
+		ex.printStackTrace();
+		return false;
+	}
+}
+	private void loadCustomers(String contextPath) {
+		BufferedReader in = null;
+		try {
+			File file = new File(contextPath + "/customers.txt");
+			in = new BufferedReader(new FileReader(file));
+			String line;
+			StringTokenizer st;
+			while ((line = in.readLine()) != null) {
+				line = line.trim();
+				if (line.equals("") || line.indexOf('#') == 0)
+					continue;
+				st = new StringTokenizer(line, ";");
+				while (st.hasMoreTokens()) {
+					ArrayList<String> visitedObjects = new ArrayList<String>();
+					String username = st.nextToken().trim();
+					String membership = st.nextToken().trim();
+					int points = Integer.parseInt(st.nextToken().trim());
+					String type = st.nextToken().trim();
+					String objects = st.nextToken().trim();
+					objects = objects.trim();
+					int i = 0;
+					StringTokenizer st_ob = new StringTokenizer(objects, "+");
+						while(st_ob.hasMoreTokens()){
+							visitedObjects.add(st_ob.nextToken().trim());
+													}
+					customers.put(username, new Customer(username, memberships.get(membership), visitedObjects, points, type));
+				}
+				
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+	}
+	
+	public boolean writeCustomers()
+	{
+		File file = new File(this.contextPath + "/customers.txt");
+		
+		if(!file.exists()){
+	     	   try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	     	}
+		
+    	PrintWriter out; 
+    	
+		try 
+		{
+			ArrayList<Customer> customerBase = new ArrayList<Customer>(this.customers.values()); 
+			out = new PrintWriter(file);
+	    	System.out.println("writing");
+	    	
+			for(Customer c: customerBase)
+			{
+				String member = "";
+				if(c.getMembership().getId() == null)
+				{
+					member = "null";
+				}
+				else
+				{
+					member = c.getMembership().getId();
+				}
+				out.print(c.getUsername() + ";" + member + ";" + c.getBodovi() + ";" + c.getTip() + ";");
+				for(String p : c.getPoseceniObjekti())
+				{
+					out.print(p);
+				}
+				
+				out.print(System.getProperty("line.separator"));
+				
 			}
 			out.close();
 			
@@ -293,8 +386,10 @@ public class UserDAO {
 			memberships.put(membership.getId(), membership);
 			writeMemberships();
 			
-			/*Customer toAdd = customers.get(membership.getCustomer());
-			toAdd.setMembership(membership);*/
+			Customer toAdd = customers.get(customer);
+			toAdd.setMembership(membership);
+			customers.put(customer, toAdd);
+			writeCustomers();
 			
 			return membership;
 		}
@@ -325,9 +420,11 @@ public class UserDAO {
 					}
 					this.memberships.put(membership.getId(), membership);
 					writeMemberships();
-					/*Customer customer = customers.get(membership.getCustomer());
-					customer.setBodovi(customer.getBodovi() + points);
-					*/
+
+					Customer toAdd = customers.get(membership.getCustomer());
+					toAdd.setMembership(membership);
+					customers.put(membership.getCustomer(), toAdd);
+					writeCustomers();
 				}
 			}
 		}

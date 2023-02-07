@@ -4,18 +4,44 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer extends User implements Serializable{
+public class Customer implements Serializable{
 	
 	enum Tip{osnovni, bronzani, srebrni, zlatni}
 	
+	private String username;
 	private Membership membership;
-	private List<Product> poseceniObjekti;
+	private ArrayList<String> poseceniObjekti;
 	private int bodovi;
 	private Tip tip;
 	
-	public Customer() {
+
+	
+	
+
+	public Customer(String username, Membership membership, ArrayList<String> poseceniObjekti, int bodovi, String tip) {
 		super();
+		this.username = username;
+		this.membership = membership;
+		this.poseceniObjekti = poseceniObjekti;
+		this.bodovi = bodovi;
+		this.tip = Tip.valueOf(tip);
 	}
+	
+	
+	public String getUsername() {
+		return username;
+	}
+
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+	public void setTip(Tip tip) {
+		this.tip = tip;
+	}
+
 
 	public Membership getMembership() {
 		return membership;
@@ -23,10 +49,10 @@ public class Customer extends User implements Serializable{
 	public void setMembership(Membership membership) {
 		this.membership = membership;
 	}
-	public List<Product> getPoseceniObjekti() {
+	public ArrayList<String> getPoseceniObjekti() {
 		return poseceniObjekti;
 	}
-	public void setPoseceniObjekti(List<Product> poseceniObjekti) {
+	public void setPoseceniObjekti(ArrayList<String> poseceniObjekti) {
 		this.poseceniObjekti = poseceniObjekti;
 	}
 	public int getBodovi() {
@@ -35,8 +61,8 @@ public class Customer extends User implements Serializable{
 	public void setBodovi(int bodovi) {
 		this.bodovi = bodovi;
 	}
-	public Tip getTip() {
-		return tip;
+	public String getTip() {
+		return tip.toString();
 	}
 	public void setTip() {
 		if(getBodovi() < 100)
@@ -59,15 +85,6 @@ public class Customer extends User implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public Customer(String username, String password, String name, String surname, String birthday, String gender) {
-		super(username, password, name, surname, birthday, gender);
-		this.membership = null;
-		this.poseceniObjekti = new ArrayList<Product>();
-		this.bodovi = 0;
-		this.tip = Tip.osnovni;
-	}
-
-
 
 
 

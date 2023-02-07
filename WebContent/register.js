@@ -10,7 +10,7 @@ $(document).ready(function() {
 		    
 		    $.post({
 		    	url: '../web2022/rest/users/register',
-		    	data: JSON.stringify({username: username, password: password, name: name, surname: surname, birthday: birthday, gender: gender}),
+		    	data: JSON.stringify({username: username, password: password, name: name, surname: surname, birthday: birthday, gender: gender, type : "customer"}),
 		    	contentType: 'application/json',
 		    	
 success: function(data) {
