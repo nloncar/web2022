@@ -1,12 +1,14 @@
 package beans;
 
+import java.util.ArrayList;
+
 public class Product {
 	
 	private String id;
 	private String name;
 	private double price;
 	private String tip_objekta;
-	private String sadrzaj;
+	private ArrayList <TrainingSession> sadrzaj;
 	private boolean status;
 	private String logo;
 	private double ocena;
@@ -25,6 +27,7 @@ public class Product {
 		this.tip_objekta = tip_objekta;
 		this.radno_vreme = radno_vreme;
 		this.setLokacija(lokacija);
+		this.sadrzaj = null;
 	}
 	
 	public String getTip_objekta() {
@@ -35,13 +38,7 @@ public class Product {
 		this.tip_objekta = tip_objekta;
 	}
 
-	public String getSadrzaj() {
-		return sadrzaj;
-	}
 
-	public void setSadrzaj(String sadrzaj) {
-		this.sadrzaj = sadrzaj;
-	}
 
 	public boolean isStatus() {
 		return status;
@@ -106,6 +103,14 @@ public class Product {
 
 	public void setLokacija(String lokacija) {
 		this.lokacija = lokacija;
+	}
+
+	public ArrayList <TrainingSession> getSadrzaj() {
+		return sadrzaj;
+	}
+
+	public void setSadrzaj(ArrayList <TrainingSession> sadrzaj) {
+		this.sadrzaj = sadrzaj;
 	}
 
 }

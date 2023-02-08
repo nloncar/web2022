@@ -3,11 +3,17 @@ package dao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import beans.Customer;
 import beans.Product;
 
 
@@ -77,8 +83,32 @@ public class ProductDAO {
 		maxId++;
 		product.setId(maxId.toString());
 		products.put(product.getId(), product);
+		writeProducts();
 		return product;
 	}
+	
+	public boolean writeProducts()
+	{
+		File file = new File(this.contextPath + "/products.json");
+		System.out.println(this.contextPath);
+		
+		if(!file.exists()){
+	     	   try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	     	}
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(file, products);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+}
 
 	/**
 	 * Uèitava objekte iz WebContent/products.txt fajla i dodaje ih u mapu {@link #products}.
@@ -86,7 +116,17 @@ public class ProductDAO {
 	 * @param contextPath Putanja do aplikacije u Tomcatu
 	 */
 	private void loadProducts(String contextPath) {
-		BufferedReader in = null;
+		
+		File file = new File(contextPath + "/products.json");
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			products = mapper.readValue(file, new TypeReference<Map<String, Product>>(){});
+			System.out.println("Loaded customers");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		/*BufferedReader in = null;
 		try {
 			File file = new File(contextPath + "/products.txt");
 			System.out.println(file.getCanonicalPath());
@@ -122,7 +162,7 @@ public class ProductDAO {
 				}
 				catch (Exception e) { }
 			}
-		}
+		}*/
 		
 	}
 }

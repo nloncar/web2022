@@ -1,6 +1,7 @@
 package beans;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -12,9 +13,10 @@ public class TrainingSession {
 	private int duration; //minutes
 	private String description;
 	private ArrayList <User> attendees;
+	private LocalDateTime startime;
 	private SessionType type;
 	
-	public TrainingSession(String name, User coach, int duration, String description, SessionType type) {
+	public TrainingSession(String name, User coach, int duration, String description, SessionType type, LocalDateTime startime) {
 		super();
 		uniqueID = UUID.randomUUID().toString();
 		this.name = name;
@@ -23,6 +25,7 @@ public class TrainingSession {
 		this.description = description;
 		this.attendees = null;
 		this.type = type;
+		this.startime = startime;
 	}
 
 	public String getName() {
@@ -75,6 +78,14 @@ public class TrainingSession {
 
 	public String getUniqueID() {
 		return uniqueID;
+	}
+
+	public LocalDateTime getStartime() {
+		return startime;
+	}
+
+	public void setStartime(LocalDateTime startime) {
+		this.startime = startime;
 	}
 	
 	
