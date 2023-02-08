@@ -1,4 +1,4 @@
-1;Teretana NS;22000;teretana;razno;true;08:00-17:00;
-2;Bazen SPENS;32000;bazen;treninzi,joga u vodi;true;07:00-20:00;
-3;Ples fkgjdk;35000;plesni studio;casovi;true;ujutro;
-4;sdfdsfsdf;7100;teretana;treninzi;false;uvece;
+1;Teretana NS;4.7;teretana;razno;Novi Sad;08:00-17:00;
+2;Bazen SPENS;5;bazen;treninzi,joga u vodi;Novi Sad;07:00-20:00;
+3;Ples fkgjdk;3.5;plesni studio;casovi;Beograd;ujutro;
+4;sdfdsfsdf;4;teretana;treninzi;Subotica;uvece;

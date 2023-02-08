@@ -90,7 +90,7 @@ public class ProductDAO {
 					radno_vreme = st.nextToken().trim();
 				}
 				products.put(id, new Product(id, name, Double
-						.parseDouble(ocena), type) );
+						.parseDouble(ocena), type, status, radno_vreme) );
 				System.out.println(type);
 				System.out.println(radno_vreme);
 			}

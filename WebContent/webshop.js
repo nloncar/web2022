@@ -13,12 +13,13 @@ function addProductTr(product) {
 	let tdNaziv = $('<td>' + product.name + '</td>');
 	let tdOcena = $('<td>' + product.ocena + '</td>');
 	let tdTip = $('<td>' + product.tip_objekta + '</td>');
-	let tdSad = $('<td>' + product.sadrzaj + '</td>');
-	let tdStatus = $('<td>' + product.status + '</td>');
+	//let tdSad = $('<td>' + product.sadrzaj + '</td>');
+	let tdStatus = $('<td>' + product.lokacija + '</td>');
 	let tdRV = $('<td>' + product.radno_vreme + '</td>');
-	tr.append(tdNaziv).append(tdOcena).append(tdTip).append(tdSad).append(tdStatus).append(tdRV);
+	tr.append(tdNaziv).append(tdOcena).append(tdTip).append(tdStatus).append(tdRV);
 	tr.click(clickClosure(product));
-	$('#tabela tbody').append(tr);
+	$('#tabelaB').append(tr);
+	//$('#tabela tbody').append(tr);
 }
 
 $(document).ready(function() {
@@ -31,16 +32,24 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('button#dodaj').click(function() {
+	$('button#pretraga').click(function() {
 		$('form#pretrazi').show();
+		$('form#dodavanje').hide();
+		
+	});
+	
+		$('button#dodaj').click(function() {
+		$('form#pretrazi').hide();
+		$('form#dodavanje').show();
 	});
 	
 	$('form#pretrazi').submit(function(event) {
 		event.preventDefault();
-		let name = $('input[name="name"]').val();
+		
+		let naziv = $('input[name="name"]').val();
 		let price = $('input[name="price"]').val();
 		let type = $('input[name="kategorija"]').val();
-		if (!name || isNaN(name)) {
+		if (!price || isNaN(price)) {
 			$('#error').text('Morate uneti naziv!');
 			$("#error").show().delay(3000).fadeOut();
 			return;
@@ -48,11 +57,41 @@ $(document).ready(function() {
 		$('p#error').hide();
 		$.post({
 			url: 'rest/products/find',
-			data: JSON.stringify({id: '', name: name, price: price, type: type}),
+			data: JSON.stringify({id: '', name: naziv, price: price, type: type}),
 			contentType: 'application/json',
 			success: function(product) {
-				$('#success').text('Novi proizvod uspešno kreiran.');
+				$('#success').text('Uspešna pretraga!');
 				$("#success").show().delay(3000).fadeOut();
+				// Dodaj novi proizvod u tabelu
+				addProductTr(product);
+			}
+		});
+	});
+	
+	$('form#dodavanje').submit(function(event) {
+		
+		
+		event.preventDefault();
+		console.log("Forma dodavanje");
+		let name = $('input[name="name1"]').val();
+		let price = $('input[name="price1"]').val();
+		let type = $('input[name="kategorija1"]').val();
+		let lokacija = $('input[name="lokacija1"]').val();
+		let rv = $('input[name="rv1"]').val();
+		let status = $('input[name="status1"]').val();
+		if (!name || Nan(price) || !type || !lokacija || !rv ) {
+			$('#error1').text('Morate uneti sve podatke!');
+			$("#error1").show().delay(3000).fadeOut();
+			return;
+		}
+		$('p#error1').hide();
+		$.post({
+			url: '../web2022/rest/products/addNew',
+			data: JSON.stringify({id: '', name: name, ocena: price, tip_objekta: type, lokacija: lokacija, radno_vreme: rv}),
+			contentType: 'application/json',
+			success: function(product) {
+				$('#success1').text('Uspešna pretraga!');
+				$("#success1").show().delay(3000).fadeOut();
 				// Dodaj novi proizvod u tabelu
 				addProductTr(product);
 			}

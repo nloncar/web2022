@@ -8,7 +8,7 @@
 		<script src="webshop.js"></script>
 	</head>
 	<body>
-		Sportski objekti:
+		<h1>Sportski objekti:</h1>
 		<table border="1" id="tabela">
 			<thead>
 				<tr bgcolor="lightgrey">
@@ -19,15 +19,16 @@
 					<th>Radno vreme</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id ="tabelaB">
 			</tbody>
 		</table>
 
-		<p><button id="dodaj">Pretraži</button></p>
+		<p><button id="pretraga">Pretraži</button><button id="dodaj">Dodaj</button></p>
 		
 		<form id="pretrazi" hidden="true">
 			<table>
 				<tr><td>Naziv</td><td><input type="text" name="name"></td></tr>
+				<tr><td>Lokacija</td><td><input type="text" name="lokacija"></td></tr>
 				<tr><td>Ocena</td><td><input type="number" name="price"></td></tr>
 				<tr><td>Tip objekta</td><td><select name="kategorija">
 					<option >Teretana</option>
@@ -37,10 +38,33 @@
 					<option >Fudbalski teren</option>
 					<option >Košarkaški teren</option>
 					</select></td></tr>
-				<tr><td><input type="submit" value="Pretrazi"></td></tr>
+				<tr><td><input type="submit" value="Izvrši pretragu"></td></tr>
 			</table>
 			<p id="error" hidden="true"></p>
 			<p id="success" hidden="true"></p>
 		</form>
+		
+		<form id="dodavanje" hidden="true">
+			<table>
+				<tr><td>Naziv</td><td><input type="text" name="name1"></td></tr>
+				<tr><td>Lokacija</td><td><input type="text" name="lokacija1"></td></tr>
+				<tr><td>Ocena</td><td><input type="number" name="price1"></td></tr>
+				<tr><td>Tip objekta</td><td><select name="kategorija1">
+					<option >Teretana</option>
+					<option >Plesni studio</option>
+					<option >Bazen</option>
+					<option >Teniski teren</option>
+					<option >Fudbalski teren</option>
+					<option >Košarkaški teren</option>
+					</select></td></tr>
+				<tr><td>Radno vreme</td><td><input type="text" name="rv1"></td></tr>
+				<tr><td>Status</td><td><input type="text" name="status1"></td></tr>
+				<tr><td><input type="submit" value="Izvrši dodavanje"></td></tr>
+			</table>
+			<p id="error1" hidden="true"></p>
+			<p id="success1" hidden="true"></p>
+		</form>
+		
+		<p> <a href="login.html">Vrati se na home/login stranicu.</a> </p>
 	</body>
 </html>

@@ -56,6 +56,16 @@ public class ProductService {
 	}
 	
 	@POST
+	@Path("/addNew")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Product addNewProduct(Product prod) {
+		System.out.println("Naziv " + prod.getName());
+		ProductDAO dao = (ProductDAO) ctx.getAttribute("productDAO");
+		return dao.save(prod);
+	}
+	
+	
+	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Product getProducts(Product product) {

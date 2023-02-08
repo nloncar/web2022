@@ -11,17 +11,20 @@ public class Product {
 	private String logo;
 	private double ocena;
 	private String radno_vreme;
+	private String lokacija;
 	
 	
 	public Product() {
 		
 	}
 
-	public Product(String id, String name, double ocena, String tip_objekta) {
+	public Product(String id, String name, double ocena, String tip_objekta, String lokacija, String radno_vreme ) {
 		this.id = id;
 		this.name = name;
 		this.ocena = ocena;
 		this.tip_objekta = tip_objekta;
+		this.radno_vreme = radno_vreme;
+		this.setLokacija(lokacija);
 	}
 	
 	public String getTip_objekta() {
@@ -95,6 +98,14 @@ public class Product {
 
 	public double getPrice() {
 		return price;
+	}
+
+	public String getLokacija() {
+		return lokacija;
+	}
+
+	public void setLokacija(String lokacija) {
+		this.lokacija = lokacija;
 	}
 
 }
