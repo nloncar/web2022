@@ -2,7 +2,7 @@
 function clickClosure(product){
 	return function() {
 		// Parametar product prosleđen u gornju funkciju će biti vidljiv u ovoj
-		// Ovo znači da je funkcija "zapamtila" za koji je proizvod vezana
+		// Ovo znači da je funkcija "zapamtila" za koji je proizvod vezanaasdsa
 		$('tr.selected').removeClass('selected');
 		$(this).addClass('selected');
 	};
