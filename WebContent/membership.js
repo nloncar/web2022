@@ -1,23 +1,23 @@
 function loadPackages(membership) {
 	let tr = $('<tr></tr>');
 	let tdType = $('<td>' + membership.type + '</td>');
-	let tdDuration = $('<td>' + membership.duration + '</td>');
 	let tdPrice = $('<td>' + membership.price + '</td>');
-	if(product.maxEntries == '0' )
+	let tdMaxEntries = "";
+	if(membership.maxEntries == '0' )
 	{
-			let tdMaxEntries = $('<td>' + "neograniceni" + '</td>');
+			tdMaxEntries = $('<td>' + "neograniceni" + '</td>');
 	}
 	else
 	{
-	let tdMaxEntries = $('<td>' + product.maxEntries + '</td>');
-	let btn = document.createElement("button");
+	tdMaxEntries = $('<td>' + membership.maxEntries + '</td>');
+	}
+		let btn = document.createElement("button");
 		btn.innerHTML = "uplati";
 		btn.type = "submit";
 		btn.name = membership.type;
 		btn.addEventListener("click", addMembership(membership.type));
-	}
-	tr.append(tdType).append(tdDuration).append(tdDuration).append(tdPrice).append(tdMaxEntries).append(tdRV);
-	tr.click(clickClosure(product));
+	tr.append(tdType).append(tdPrice).append(tdMaxEntries).append(btn);
+	//console.log(tr);
 	$('#tabela tbody').append(tr);
 }
 
@@ -61,5 +61,5 @@ $(document).ready(function() {
 			}
 		}
 	});
-	showCurrentMembership();
+	//showCurrentMembership();
 });

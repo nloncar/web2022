@@ -45,8 +45,8 @@ public class UserDAO {
 
 	public UserDAO(String contextPath) {
 		loadUsers(contextPath);
-		loadMemberships(contextPath);
 		loadCustomers(contextPath);
+		loadMemberships(contextPath);
 		this.contextPath = contextPath;
 	}
 	
@@ -87,6 +87,7 @@ public class UserDAO {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			users = mapper.readValue(file, new TypeReference<Map<String, User>>(){});
+			System.out.println("Loaded users");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -148,7 +149,8 @@ public class UserDAO {
 		File file = new File(contextPath + "/customers.json");
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			users = mapper.readValue(file, new TypeReference<Map<String, Customer>>(){});
+			customers = mapper.readValue(file, new TypeReference<Map<String, Customer>>(){});
+			System.out.println("Loaded customers");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -183,10 +185,11 @@ public class UserDAO {
 		//MEMBERSHIPS//
 		
 		private void loadMemberships(String contextPath) {
-			File file = new File(contextPath + "/memebrships.json");
+			File file = new File(contextPath + "/memberships.json");
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				users = mapper.readValue(file, new TypeReference<Map<String, Membership>>(){});
+				memberships = mapper.readValue(file, new TypeReference<Map<String, Membership>>(){});
+				System.out.println("Loaded memberships");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -219,7 +222,7 @@ public class UserDAO {
 			return memberships.values();
 		}
 		
-		public ArrayList<Membership> getMemberPackages()
+		public Collection<Membership> getMemberPackages()
 		{
 			ArrayList<Membership> ret = new ArrayList<Membership>();
 			ArrayList<Membership> memberships = new ArrayList<Membership>(this.memberships.values()); 
@@ -228,6 +231,7 @@ public class UserDAO {
 				if(membership.getCustomer() == null)
 				{
 					ret.add(membership);
+					System.out.println("Loaded member package:" + membership.getType());
 				}
 			}
 			return ret;
@@ -318,7 +322,11 @@ public class UserDAO {
 		public Membership getMembershipByUser(String username)
 		{
 			Customer customer = customers.get(username);
+			if(customer.getMembership() != null)
+			{
 			return customer.getMembership();
+			}
+			return null;
 		}
 }
 	

@@ -2,6 +2,7 @@ package services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -107,12 +108,13 @@ public class UserService {
 	}
 	
 	@GET
-	@Path("/memberPackages")
+	@Path("/getMemberPackages")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Membership> memberPackages(@Context HttpServletRequest request) {
+	public Collection<Membership> memberPackages(@Context HttpServletRequest request) {
 		System.out.println("loaded");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		return userDao.getMemberPackages();
+		Collection<Membership> memberships = userDao.getMemberPackages();
+		return memberships;
 	}
 	
 	@POST
