@@ -50,7 +50,7 @@ public class ProductService {
 	@PUT
 	@Path("/find/{naziv}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Product pretragaArtikla(@PathParam("naziv") String naziv) {
+	public Collection<Product> pretragaArtikla(@PathParam("naziv") String naziv) {
 		ProductDAO dao = (ProductDAO) ctx.getAttribute("productDAO");
 		return dao.findProduct(naziv);
 	}
@@ -59,7 +59,8 @@ public class ProductService {
 	@Path("/addNew")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Product addNewProduct(Product prod) {
-		System.out.println("Naziv " + prod.getName());
+		System.out.println("Naziv: " + prod.getName());
+		System.out.println("Tip objekta: " + prod.getTip_objekta());
 		ProductDAO dao = (ProductDAO) ctx.getAttribute("productDAO");
 		return dao.save(prod);
 	}

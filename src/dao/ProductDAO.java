@@ -3,6 +3,7 @@ package dao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -38,9 +39,25 @@ public class ProductDAO {
 	/***
 	 *  Vraca proizvod na osnovu njegovog id-a. 
 	 *  @return Proizvod sa id-em ako postoji, u suprotnom null
-	 */
+	 
 	public Product findProduct(String naziv) {
 		return products.containsKey(naziv) ? products.get(naziv) : null;
+	}*/
+	
+	public Collection<Product> findProduct(String naziv) {
+		
+		ArrayList<Product> ret=new ArrayList<Product>();
+		
+		for(Product r : products.values())
+		{
+			if(r.getName().equals(naziv) )
+			{
+				ret.add(r);
+				System.out.println("Naziv pret " + r.getName());
+			}
+		}
+		
+		return ret;
 	}
 	
 	/***
@@ -48,6 +65,8 @@ public class ProductDAO {
 	 * @param product
 	 */
 	public Product save(Product product) {
+
+		System.out.println("Naziv dodaj " + product.getName());
 		Integer maxId = -1;
 		for (String id : products.keySet()) {
 			int idNum =Integer.parseInt(id);
@@ -91,7 +110,7 @@ public class ProductDAO {
 				}
 				products.put(id, new Product(id, name, Double
 						.parseDouble(ocena), type, status, radno_vreme) );
-				System.out.println(type);
+				System.out.println(name);
 				System.out.println(radno_vreme);
 			}
 		} catch (Exception e) {

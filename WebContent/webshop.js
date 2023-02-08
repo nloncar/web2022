@@ -8,6 +8,11 @@ function clickClosure(product){
 	};
 }
 
+function refreshPage(){
+    window.location.reload();
+} 
+
+
 function addProductTr(product) {
 	let tr = $('<tr></tr>');
 	let tdNaziv = $('<td>' + product.name + '</td>');
@@ -23,6 +28,7 @@ function addProductTr(product) {
 }
 
 $(document).ready(function() {
+	
 	$.get({
 		url: 'rest/products',
 		success: function(products) {
@@ -35,6 +41,7 @@ $(document).ready(function() {
 	$('button#pretraga').click(function() {
 		$('form#pretrazi').show();
 		$('form#dodavanje').hide();
+		
 		
 	});
 	
@@ -49,21 +56,30 @@ $(document).ready(function() {
 		let naziv = $('input[name="name"]').val();
 		let price = $('input[name="price"]').val();
 		let type = $('input[name="kategorija"]').val();
-		if (!price || isNaN(price)) {
-			$('#error').text('Morate uneti naziv!');
+		if (!naziv && isNaN(price) && !type ) {
+			$('#error').text('Morate uneti neki parametar za pretragu!');
 			$("#error").show().delay(3000).fadeOut();
 			return;
 		}
 		$('p#error').hide();
-		$.post({
-			url: 'rest/products/find',
-			data: JSON.stringify({id: '', name: naziv, price: price, type: type}),
+		
+
+		
+		$.ajax({
+			url: 'rest/products/find/' + naziv,
+			type:'PUT',
 			contentType: 'application/json',
-			success: function(product) {
+			success: function(products) {
 				$('#success').text('Uspešna pretraga!');
 				$("#success").show().delay(3000).fadeOut();
 				// Dodaj novi proizvod u tabelu
+				//addProductTr(product);
+				console.log("Forma pretraga uspešna");
+				$('#tabelaB').empty();
+				for (let product of products) {
+					console.log(product.name);
 				addProductTr(product);
+			}
 			}
 		});
 	});
@@ -72,14 +88,17 @@ $(document).ready(function() {
 		
 		
 		event.preventDefault();
+		
+		
 		console.log("Forma dodavanje");
-		let name = $('input[name="name1"]').val();
-		let price = $('input[name="price1"]').val();
-		let type = $('input[name="kategorija1"]').val();
-		let lokacija = $('input[name="lokacija1"]').val();
-		let rv = $('input[name="rv1"]').val();
-		let status = $('input[name="status1"]').val();
-		if (!name || Nan(price) || !type || !lokacija || !rv ) {
+		let name1 = $('input[name="name1"]').val();
+		let price1 = $('input[name="price1"]').val();
+		let type1 =$('select[name=kategorija]').val();
+		let lokacija1 = $('input[name="lokacija1"]').val();
+		let rv1 = $('input[name="rv1"]').val();
+		let status1 = $('input[name="status1"]').val();
+
+		if (!name1  || !lokacija1 || !rv1 ) {
 			$('#error1').text('Morate uneti sve podatke!');
 			$("#error1").show().delay(3000).fadeOut();
 			return;
@@ -87,11 +106,12 @@ $(document).ready(function() {
 		$('p#error1').hide();
 		$.post({
 			url: '../web2022/rest/products/addNew',
-			data: JSON.stringify({id: '', name: name, ocena: price, tip_objekta: type, lokacija: lokacija, radno_vreme: rv}),
+			data: JSON.stringify({id: '', name: name1, ocena: price1, tip_objekta: type1, lokacija: lokacija1, radno_vreme: rv1}),
 			contentType: 'application/json',
 			success: function(product) {
 				$('#success1').text('Uspešna pretraga!');
 				$("#success1").show().delay(3000).fadeOut();
+				console.log("Forma dodavanje");
 				// Dodaj novi proizvod u tabelu
 				addProductTr(product);
 			}
