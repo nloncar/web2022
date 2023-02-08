@@ -23,6 +23,12 @@ import beans.Product;
 import beans.TrainingSession;
 import beans.User;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class UserDAO {
 	
 	private Map<String, User> users = new HashMap<>();
@@ -60,46 +66,24 @@ public class UserDAO {
 	}
 
 	private void loadUsers(String contextPath) {
-		BufferedReader in = null;
+		System.out.println("loading");
+		File file = new File(contextPath + "/users.json");
 		try {
-			File file = new File(contextPath + "/users.txt");
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					String username = st.nextToken().trim();
-					String password = st.nextToken().trim();
-					String name = st.nextToken().trim();
-					String surname = st.nextToken().trim();
-					String birthday = st.nextToken().trim();
-					String gender = st.nextToken().trim();
-					String type = st.nextToken().trim();
-					users.put(username, new User(username, password, name, surname, birthday, gender, type));
-				}
-				
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				}
-				catch (Exception e) { }
-			}
+			ObjectMapper mapper = new ObjectMapper();
+			users = mapper.readValue(file, new TypeReference<Map<String, User>>(){});
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
+	
 	
 	public User editUser(String username, String password, String name, String surname, String birthday, String gender)
 	{
 		System.out.println("editing:");
 		User user = new User(username, password, name, surname, birthday, gender, "customer");
+		Customer customer = new Customer(username, password, name, surname, birthday, gender, "customer");
 		users.put(username, user);
+		customers.put(username, customer);
 		writeUsers();
 		System.out.println(user.getUsername() + "se sad zove " + user.getName());
 		return user;
@@ -122,7 +106,7 @@ public class UserDAO {
 	
 	public boolean writeUsers()
 	{
-		File file = new File(this.contextPath + "/users.txt");
+		File file = new File(this.contextPath + "/users.json");
 		
 		if(!file.exists()){
 	     	   try {
@@ -132,79 +116,28 @@ public class UserDAO {
 				e.printStackTrace();
 			}
 	     	}
-		
-		System.out.println(this.contextPath + "/users.txt");
-    	PrintWriter out; 
-    	
-		try 
-		{
-			ArrayList<User> usersBase = new ArrayList<User>(this.users.values()); 
-			out = new PrintWriter(file);
-	    	System.out.println("writing");
-	    	
-			for(User user : usersBase)
-			{
-				out.print(user.getUsername() + ";" + user.getPassword() + ";" + user.getName()
-				+ ";" + user.getSurname() + ";" + user.getBirthday() + ";" + user.getGender());
-				
-				out.print(System.getProperty("line.separator"));
-							
-				
-				System.out.println("written " +user.getUsername() + " " + user.getGender());
-			}
-			out.close();
-			
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(file, users);
 			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
-		catch (Exception ex) {
-		ex.printStackTrace();
-		return false;
-	}
 }
 	private void loadCustomers(String contextPath) {
-		BufferedReader in = null;
+		File file = new File(contextPath + "/customers.json");
 		try {
-			File file = new File(contextPath + "/customers.txt");
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					ArrayList<String> visitedObjects = new ArrayList<String>();
-					String username = st.nextToken().trim();
-					String membership = st.nextToken().trim();
-					int points = Integer.parseInt(st.nextToken().trim());
-					String type = st.nextToken().trim();
-					String objects = st.nextToken().trim();
-					objects = objects.trim();
-					int i = 0;
-					StringTokenizer st_ob = new StringTokenizer(objects, "+");
-						while(st_ob.hasMoreTokens()){
-							visitedObjects.add(st_ob.nextToken().trim());
-													}
-					customers.put(username, new Customer(username, memberships.get(membership), visitedObjects, points, type));
-				}
-				
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				}
-				catch (Exception e) { }
-			}
+			ObjectMapper mapper = new ObjectMapper();
+			users = mapper.readValue(file, new TypeReference<Map<String, Customer>>(){});
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public boolean writeCustomers()
 	{
-		File file = new File(this.contextPath + "/customers.txt");
+		File file = new File(this.contextPath + "/customers.json");
 		
 		if(!file.exists()){
 	     	   try {
@@ -214,88 +147,31 @@ public class UserDAO {
 				e.printStackTrace();
 			}
 	     	}
-		
-    	PrintWriter out; 
-    	
-		try 
-		{
-			ArrayList<Customer> customerBase = new ArrayList<Customer>(this.customers.values()); 
-			out = new PrintWriter(file);
-	    	System.out.println("writing");
-	    	
-			for(Customer c: customerBase)
-			{
-				String member = "";
-				if(c.getMembership().getId() == null)
-				{
-					member = "null";
-				}
-				else
-				{
-					member = c.getMembership().getId();
-				}
-				out.print(c.getUsername() + ";" + member + ";" + c.getBodovi() + ";" + c.getTip() + ";");
-				for(String p : c.getPoseceniObjekti())
-				{
-					out.print(p);
-				}
-				
-				out.print(System.getProperty("line.separator"));
-				
-			}
-			out.close();
-			
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(file, customers);
 			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
-		catch (Exception ex) {
-		ex.printStackTrace();
-		return false;
-	}
 }
 		
 		//MEMBERSHIPS//
 		
 		private void loadMemberships(String contextPath) {
-			BufferedReader in = null;
+			File file = new File(contextPath + "/memebrships.json");
 			try {
-				File file = new File(contextPath + "/memberships.txt");
-				in = new BufferedReader(new FileReader(file));
-				String line;
-				StringTokenizer st;
-				while ((line = in.readLine()) != null) {
-					line = line.trim();
-					if (line.equals("") || line.indexOf('#') == 0)
-						continue;
-					st = new StringTokenizer(line, ";");
-					while (st.hasMoreTokens()) {
-						String id = st.nextToken().trim();
-						String username = st.nextToken().trim();
-						MembershipType type = MembershipType.valueOf(st.nextToken().trim());
-						LocalDate billingDate = LocalDate.parse(st.nextToken().trim(), dateFormatter);
-						LocalDate expirationDate = LocalDate.parse(st.nextToken().trim(), dateFormatter);
-						Boolean status = Boolean.parseBoolean(st.nextToken().trim());
-						int maxEntries = Integer.parseInt(st.nextToken().trim());
-						int usedEntries = Integer.parseInt(st.nextToken().trim());
-						int price = Integer.parseInt(st.nextToken().trim());
-						memberships.put(username, new Membership(id, username, type, billingDate, expirationDate, status, maxEntries, usedEntries, price));
-					}
-					
-				}
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			} finally {
-				if (in != null) {
-					try {
-						in.close();
-					}
-					catch (Exception e) { }
-				}
+				ObjectMapper mapper = new ObjectMapper();
+				users = mapper.readValue(file, new TypeReference<Map<String, Membership>>(){});
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		
 		public boolean writeMemberships()
 		{
-			File file = new File(this.contextPath + "/memberships.txt");
+			File file = new File(this.contextPath + "/memberships.json");
 			
 			if(!file.exists()){
 		     	   try {
@@ -305,31 +181,14 @@ public class UserDAO {
 					e.printStackTrace();
 				}
 		     	}
-	    	PrintWriter out; 
-	    	
-			try 
-			{
-				ArrayList<Membership> membershipBase = new ArrayList<Membership>(this.memberships.values()); 
-				out = new PrintWriter(file);
-		    	System.out.println("writing");
-		    	
-				for(Membership membership : membershipBase)
-				{
-					out.print(membership.getCustomer() + ";" + membership.getType().toString() + ";" + membership.getBillingDate().toString()
-					+ ";" + membership.getExpirationDate().toString() + ";" + membership.getStatus().toString() + ";" + membership.getMaxEntries() + ";" + membership.getUsedEntries()
-					+ ";" + membership.getPrice());
-					
-					out.print(System.getProperty("line.separator"));
-								
-				}
-				out.close();
-				
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.writeValue(file, memberships);
 				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-			catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
 	}
 		
 		public Collection<Membership> findAllMemberships()
