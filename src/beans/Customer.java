@@ -4,39 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer implements Serializable{
+public class Customer extends User implements Serializable{
 	
 	enum Tip{osnovni, bronzani, srebrni, zlatni}
 	
-	private String username;
 	private Membership membership;
-	private ArrayList<String> poseceniObjekti;
+	private ArrayList<Product> poseceniObjekti;
 	private int bodovi;
 	private Tip tip;
 	
-
 	
 	
 
-	public Customer(String username, Membership membership, ArrayList<String> poseceniObjekti, int bodovi, String tip) {
-		super();
-		this.username = username;
-		this.membership = membership;
-		this.poseceniObjekti = poseceniObjekti;
-		this.bodovi = bodovi;
-		this.tip = Tip.valueOf(tip);
+	
+	public Customer(String username, String password, String name, String surname, String birthday, String gender, String type) {
+		super(username, password, name, surname, birthday, gender, type);
+		this.membership = null;
+		this.poseceniObjekti = new ArrayList<Product>();
+		this.bodovi = 0;
+		this.tip = Tip.osnovni;
 	}
-	
-	
-	public String getUsername() {
-		return username;
-	}
-
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 
 	public void setTip(Tip tip) {
 		this.tip = tip;
@@ -49,10 +36,10 @@ public class Customer implements Serializable{
 	public void setMembership(Membership membership) {
 		this.membership = membership;
 	}
-	public ArrayList<String> getPoseceniObjekti() {
+	public ArrayList<Product> getPoseceniObjekti() {
 		return poseceniObjekti;
 	}
-	public void setPoseceniObjekti(ArrayList<String> poseceniObjekti) {
+	public void setPoseceniObjekti(ArrayList<Product> poseceniObjekti) {
 		this.poseceniObjekti = poseceniObjekti;
 	}
 	public int getBodovi() {
