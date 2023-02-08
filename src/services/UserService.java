@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Customer;
 import beans.Membership;
 import beans.MembershipType;
 import beans.User;
@@ -98,10 +99,10 @@ public class UserService {
 	@Path("/currentUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User currentUser(@Context HttpServletRequest request) {
+	public Customer currentUser(@Context HttpServletRequest request) {
 		System.out.println("loaded");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		User currentUser = (User) request.getSession().getAttribute("user");
+		Customer currentUser = userDao.findCustomer(((User) request.getSession().getAttribute("user")).getUsername());
 		return currentUser;
 	}
 	

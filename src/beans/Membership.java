@@ -15,7 +15,7 @@ public class Membership {
 	private int usedEntries;
 	private int price;
 	public Membership(String id, String customer, MembershipType type, LocalDate billingDate, LocalDate expirationDate,
-			Boolean status, int maxEntries, int usedEntries, int Price) {
+			Boolean status, int maxEntries, int usedEntries, int price) {
 		super();
 		if(id == null)
 		{

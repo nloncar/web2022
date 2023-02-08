@@ -46,9 +46,25 @@ public class UserDAO {
 	public UserDAO(String contextPath) {
 		loadUsers(contextPath);
 		loadMemberships(contextPath);
+		loadCustomers(contextPath);
 		this.contextPath = contextPath;
 	}
 	
+	/*public void generateMemberPackages()
+	{
+		Membership trial = new Membership(null, null, MembershipType.valueOf("trial"), null, null, false, 4, 0, 500);
+		Membership monthly = new Membership(null, null, MembershipType.valueOf("monthly"), null, null, false, 10, 0, 5000);
+		Membership halfyearly = new Membership(null, null, MembershipType.valueOf("halfyearly"), null, null, false, 80, 0, 25000);
+		Membership yearly = new Membership(null, null, MembershipType.valueOf("yearly"), null, null, false, 0, 0, 50000);
+		
+		memberships.put(trial.getId(), trial);
+		memberships.put(monthly.getId(), monthly);
+		memberships.put(halfyearly.getId(), halfyearly);
+		memberships.put(yearly.getId(), yearly);
+		
+		writeMemberships();
+		System.out.println("generated member packages");
+	}*/
 
 	public User find(String username, String password) {
 		if (!users.containsKey(username)) {
@@ -98,9 +114,12 @@ public class UserDAO {
 		}
 
 		User user = new User(username, password, name, surname, birthday, gender, "customer");
+		Customer customer = new Customer(username, password, name, surname, birthday, gender, "customer");
 		users.put(username, user);
+		customers.put(username, customer);
 		System.out.println("added");
 		writeUsers();
+		writeCustomers();
 		return user;
 	}
 	
@@ -155,7 +174,11 @@ public class UserDAO {
 			e.printStackTrace();
 			return false;
 		}
-}
+	}
+	
+	public Customer findCustomer(String username) {
+		return customers.get(username);
+	}
 		
 		//MEMBERSHIPS//
 		
@@ -258,9 +281,11 @@ public class UserDAO {
 			ArrayList<Membership> memberships = new ArrayList<Membership>(this.memberships.values()); 
 			for(Membership membership: memberships)
 			{
-				int points = 0;
+				if(membership.getCustomer() != null)
+				{
 				if(membership.getExpirationDate().isAfter(LocalDate.now()))
 				{
+					int points = 0;
 					membership.setStatus(false);
 					if(membership.getMaxEntries() == 0)
 					{
@@ -281,25 +306,19 @@ public class UserDAO {
 					writeMemberships();
 
 					Customer toAdd = customers.get(membership.getCustomer());
+					toAdd.setBodovi(toAdd.getBodovi() + points);
 					toAdd.setMembership(membership);
 					customers.put(membership.getCustomer(), toAdd);
 					writeCustomers();
+					}
 				}
 			}
 		}
 		
 		public Membership getMembershipByUser(String username)
 		{
-			ArrayList<Membership> membershipBase = new ArrayList<Membership>(this.memberships.values()); 
-			
-			for(Membership m : membershipBase)
-			{
-				if(m.getCustomer().equals(username))
-				{
-					return m;
-				}
-			}
-			return null;
+			Customer customer = customers.get(username);
+			return customer.getMembership();
 		}
 }
 	

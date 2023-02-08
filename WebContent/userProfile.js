@@ -5,6 +5,8 @@ function load(user)
 		document.getElementById("surname").innerHTML = user.surname;
 		document.getElementById("birthday").innerHTML = user.birthday;
 		document.getElementById("gender").innerHTML = user.gender;
+		document.getElementById("type").innerHTML = user.tip;
+		document.getElementById("points").innerHTML = user.bodovi;
 }
 
 function reloadProfile()
