@@ -15,7 +15,10 @@ public class Customer extends User implements Serializable{
 	
 	
 	
-
+	public Customer()
+	{
+		super();
+	}
 	
 	public Customer(String username, String password, String name, String surname, String birthday, String gender, String type) {
 		super(username, password, name, surname, birthday, gender, type);
@@ -23,6 +26,15 @@ public class Customer extends User implements Serializable{
 		this.poseceniObjekti = new ArrayList<Product>();
 		this.bodovi = 0;
 		this.tip = Tip.osnovni;
+	}
+	
+	public Customer(String username, String password, String name, String surname, String birthday, String gender, String type,
+			Membership membership, ArrayList<Product> poseceniObjekti, int bodovi, String tip) {
+		super(username, password, name, surname, birthday, gender, type);
+		this.membership = membership;
+		this.poseceniObjekti = poseceniObjekti;
+		this.bodovi = bodovi;
+		this.tip = Tip.valueOf(tip);
 	}
 
 	public void setTip(Tip tip) {

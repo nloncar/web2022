@@ -45,10 +45,26 @@ public class UserDAO {
 
 	public UserDAO(String contextPath) {
 		loadUsers(contextPath);
+		loadCustomers(contextPath);
 		loadMemberships(contextPath);
 		this.contextPath = contextPath;
 	}
 	
+	/*public void generateMemberPackages()
+	{
+		Membership trial = new Membership(null, null, MembershipType.valueOf("trial"), null, null, false, 4, 0, 500);
+		Membership monthly = new Membership(null, null, MembershipType.valueOf("monthly"), null, null, false, 10, 0, 5000);
+		Membership halfyearly = new Membership(null, null, MembershipType.valueOf("halfyearly"), null, null, false, 80, 0, 25000);
+		Membership yearly = new Membership(null, null, MembershipType.valueOf("yearly"), null, null, false, 0, 0, 50000);
+		
+		memberships.put(trial.getId(), trial);
+		memberships.put(monthly.getId(), monthly);
+		memberships.put(halfyearly.getId(), halfyearly);
+		memberships.put(yearly.getId(), yearly);
+		
+		writeMemberships();
+		System.out.println("generated member packages");
+	}*/
 
 	public User find(String username, String password) {
 		if (!users.containsKey(username)) {
@@ -71,6 +87,7 @@ public class UserDAO {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			users = mapper.readValue(file, new TypeReference<Map<String, User>>(){});
+			System.out.println("Loaded users");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,9 +115,12 @@ public class UserDAO {
 		}
 
 		User user = new User(username, password, name, surname, birthday, gender, "customer");
+		Customer customer = new Customer(username, password, name, surname, birthday, gender, "customer");
 		users.put(username, user);
+		customers.put(username, customer);
 		System.out.println("added");
 		writeUsers();
+		writeCustomers();
 		return user;
 	}
 	
@@ -129,7 +149,8 @@ public class UserDAO {
 		File file = new File(contextPath + "/customers.json");
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			users = mapper.readValue(file, new TypeReference<Map<String, Customer>>(){});
+			customers = mapper.readValue(file, new TypeReference<Map<String, Customer>>(){});
+			System.out.println("Loaded customers");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -155,15 +176,20 @@ public class UserDAO {
 			e.printStackTrace();
 			return false;
 		}
-}
+	}
+	
+	public Customer findCustomer(String username) {
+		return customers.get(username);
+	}
 		
 		//MEMBERSHIPS//
 		
 		private void loadMemberships(String contextPath) {
-			File file = new File(contextPath + "/memebrships.json");
+			File file = new File(contextPath + "/memberships.json");
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				users = mapper.readValue(file, new TypeReference<Map<String, Membership>>(){});
+				memberships = mapper.readValue(file, new TypeReference<Map<String, Membership>>(){});
+				System.out.println("Loaded memberships");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -196,7 +222,7 @@ public class UserDAO {
 			return memberships.values();
 		}
 		
-		public ArrayList<Membership> getMemberPackages()
+		public Collection<Membership> getMemberPackages()
 		{
 			ArrayList<Membership> ret = new ArrayList<Membership>();
 			ArrayList<Membership> memberships = new ArrayList<Membership>(this.memberships.values()); 
@@ -205,6 +231,7 @@ public class UserDAO {
 				if(membership.getCustomer() == null)
 				{
 					ret.add(membership);
+					System.out.println("Loaded member package:" + membership.getType());
 				}
 			}
 			return ret;
@@ -258,9 +285,11 @@ public class UserDAO {
 			ArrayList<Membership> memberships = new ArrayList<Membership>(this.memberships.values()); 
 			for(Membership membership: memberships)
 			{
-				int points = 0;
+				if(membership.getCustomer() != null)
+				{
 				if(membership.getExpirationDate().isAfter(LocalDate.now()))
 				{
+					int points = 0;
 					membership.setStatus(false);
 					if(membership.getMaxEntries() == 0)
 					{
@@ -281,23 +310,21 @@ public class UserDAO {
 					writeMemberships();
 
 					Customer toAdd = customers.get(membership.getCustomer());
+					toAdd.setBodovi(toAdd.getBodovi() + points);
 					toAdd.setMembership(membership);
 					customers.put(membership.getCustomer(), toAdd);
 					writeCustomers();
+					}
 				}
 			}
 		}
 		
 		public Membership getMembershipByUser(String username)
 		{
-			ArrayList<Membership> membershipBase = new ArrayList<Membership>(this.memberships.values()); 
-			
-			for(Membership m : membershipBase)
+			Customer customer = customers.get(username);
+			if(customer.getMembership() != null)
 			{
-				if(m.getCustomer().equals(username))
-				{
-					return m;
-				}
+			return customer.getMembership();
 			}
 			return null;
 		}

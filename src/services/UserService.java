@@ -2,6 +2,7 @@ package services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.Customer;
 import beans.Membership;
 import beans.MembershipType;
 import beans.User;
@@ -98,20 +100,21 @@ public class UserService {
 	@Path("/currentUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User currentUser(@Context HttpServletRequest request) {
+	public Customer currentUser(@Context HttpServletRequest request) {
 		System.out.println("loaded");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		User currentUser = (User) request.getSession().getAttribute("user");
+		Customer currentUser = userDao.findCustomer(((User) request.getSession().getAttribute("user")).getUsername());
 		return currentUser;
 	}
 	
 	@GET
-	@Path("/memberPackages")
+	@Path("/getMemberPackages")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Membership> memberPackages(@Context HttpServletRequest request) {
+	public Collection<Membership> memberPackages(@Context HttpServletRequest request) {
 		System.out.println("loaded");
 		UserDAO userDao = (UserDAO) ctx.getAttribute("userDAO");
-		return userDao.getMemberPackages();
+		Collection<Membership> memberships = userDao.getMemberPackages();
+		return memberships;
 	}
 	
 	@POST
