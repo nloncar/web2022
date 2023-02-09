@@ -56,10 +56,10 @@ public class ProductDAO {
 		
 		for(Product r : products.values())
 		{
-			if(r.getName().equals(naziv) )
+			if(r.getName().contains(naziv) )
 			{
 				ret.add(r);
-				System.out.println("Naziv pret " + r.getName());
+				System.out.println("Naziv pretraga: " + r.getName());
 			}
 		}
 		
@@ -82,6 +82,7 @@ public class ProductDAO {
 		}
 		maxId++;
 		product.setId(maxId.toString());
+		product.setStatus(true);
 		products.put(product.getId(), product);
 		writeProducts();
 		return product;

@@ -1,5 +1,6 @@
 package beans;
 
+
 import java.util.ArrayList;
 
 public class Product {
@@ -10,7 +11,6 @@ public class Product {
 	private String tip_objekta;
 	private ArrayList <TrainingSession> sadrzaj;
 	private boolean status;
-	private String logo;
 	private double ocena;
 	private String radno_vreme;
 	private String lokacija;
@@ -28,6 +28,7 @@ public class Product {
 		this.radno_vreme = radno_vreme;
 		this.setLokacija(lokacija);
 		this.sadrzaj = null;
+		this.status = true;
 	}
 	
 	public String getTip_objekta() {
@@ -48,13 +49,6 @@ public class Product {
 		this.status = status;
 	}
 
-	public String getLogo() {
-		return logo;
-	}
-
-	public void setLogo(String logo) {
-		this.logo = logo;
-	}
 
 	public double getOcena() {
 		return ocena;
@@ -112,6 +106,8 @@ public class Product {
 	public void setSadrzaj(ArrayList <TrainingSession> sadrzaj) {
 		this.sadrzaj = sadrzaj;
 	}
+
+
 
 }
 
